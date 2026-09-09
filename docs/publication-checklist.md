@@ -22,7 +22,7 @@ These are not missing or placeholder contact details. Approval of sourced metada
 - [ ] Owner-approved distribution/license/legal terms and any required notices. This repository's documentation does not grant usage rights, promise an entitlement, or establish a legal position.
 - [ ] Confirm the final package/listing uses the approved publisher/contact/support/source metadata above; verify publisher account/branding and public URL accuracy for release. Keep the private source-repository URL distinct from public support. Any required legal URLs still need owner approval.
 - [ ] Actual marketplace/store requirements reviewed against the intended submission route and current rules. No certification badge, certified-visual claim, or certification eligibility promise without an actual decision from Microsoft.
-- [ ] Original, genuine **native-host** screenshots/media captured after successful import/binding, using the synthetic dataset only. No generated mock screenshots, renamed ZIP-as-PBIX artifacts, or misleading report renders.
+- [ ] Approve the three actual final-package browser captures and original icon20/logo300; capture native-host media after import if required by the reviewer. Browser-harness images are labeled as such, never as Desktop/Service acceptance. No generated mock screenshots or renamed ZIP-as-PBIX artifacts.
 
 ## Product and package review
 
@@ -33,16 +33,18 @@ These are not missing or placeholder contact details. Approval of sourced metada
 - [ ] Confirm field roles, limits, host reduction warnings, frequency/overflow rules, duplicate-duration diagnostics, and explicit metric provenance match [the contract](data-contract.md).
 - [ ] Verify no arbitrary first-edge/node selection, no hidden case inference, no `fetchMoreData`, and no weighted duration mode.
 - [ ] Check the final artifact and listing preserve the accepted interaction contract: table mapping with `supportsHighlight: false`, host cross-filtering, and local selected-row highlighting—not incoming categorical highlight measures.
-- [ ] Keep generated build artifacts under ignored `dist`; distribute only reviewed release outputs through an owner-approved process.
+- [ ] Seal package/source/assets/report/evidence with individual hashes. Keep generated artifacts ignored; distribute only reviewed outputs through an owner-approved process.
+- [ ] Confirm the exact lowercase `certification` branch points to the reviewed source baseline and stays fixed through submission. Private reviewer access is owner-managed; never include credentials.
+- [ ] Keep Actions disabled and workflow files absent. All build/validation evidence is local; no GitHub-hosted CI/CD.
 
 ## Native-host gates — all unverified here
 
-- [ ] Open/refresh the supplied source-authored PBIP in a supported Desktop version, or record/review a Desktop-generated replacement. Confirm the absolute local CSV parameter and the 12-row native table.
-- [ ] Import and manually bind the **actual** `.pbiviz`, set metric statistic/unit/provenance, save/reopen, and confirm the sample self-loop/cycle/metrics.
+- [ ] Open/refresh the populated source-authored offline PBIP in supported Desktop, or record/review any Desktop-required corrections. Confirm all bound pages, exact package resources and the12-row native table.
+- [ ] Confirm supplied bindings and duration metadata, save/reopen/bookmarks/focus mode, and sample self-loop/cycle/metrics. Convert a real offline PBIX containing the exact visual for submission.
 - [ ] Execute Desktop interaction, invalid-input, bounds, model-grain, context-menu, and native tooltip checks from [validation](validation.md).
 - [ ] Execute keyboard-only and screen-reader checks in actual Desktop and Service, including focus, selected state, context menus, high contrast, zoom, and small containers. No accessibility compliance claim based only on ARIA markup or a browser harness.
 - [ ] Verify English/French UI, English fallback, RTL in relevant host locales, and reduced-motion/no-animation behavior.
-- [ ] Verify authorized Service deployment and tenant visual policies, supported browser behavior, and a deliberate refresh solution for the local CSV source.
+- [ ] Verify authorized Service deployment, tenant policies, current supported browsers/devices and offline sample behavior. Replacement data sources need a deliberate refresh configuration.
 - [ ] Verify each claimed export/subscription scenario natively. Record unsupported or policy-blocked cases honestly.
 - [ ] Record tester/date/environment/package hash and genuine evidence for each gate; resolve defects before changing status.
 

@@ -6,6 +6,7 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "lint": "eslint src tests",
+    "eslint": "eslint src tests",
     "test": "vitest run",
     "package": "node scripts/package.mjs",
     "audit:certification": "node scripts/package.mjs --certification-audit",
@@ -14,7 +15,9 @@
     "audit:package": "node scripts/audit-package.mjs",
     "audit:dependencies": "npm audit",
     "sample": "node samples/prepare-transitions.mjs",
-    "notices": "node scripts/dependency-notices.mjs"
+    "notices": "node scripts/dependency-notices.mjs",
+    "validate:release": "node scripts/validate-release.mjs",
+    "seal:release": "node scripts/seal-release.mjs"
   },
   "dependencies": {
     "powerbi-visuals-utils-formattingutils": "7.0.0"
@@ -22,16 +25,20 @@
   "devDependencies": {
     "@playwright/test": "1.58.2",
     "@types/node": "24.10.1",
+    "ajv": "6.15.0",
     "eslint": "9.39.1",
+    "eslint-plugin-powerbi-visuals": "1.1.1",
+    "jszip": "3.10.1",
     "powerbi-visuals-api": "5.11.1",
     "powerbi-visuals-tools": "7.2.1",
     "typescript": "5.9.3",
     "typescript-eslint": "8.57.0",
-    "vitest": "4.1.11",
-    "jszip": "3.10.1"
+    "vitest": "4.1.11"
   },
   "overrides": {
     "qs": "6.16.0",
-    "sockjs": { "uuid": "11.1.1" }
+    "sockjs": {
+      "uuid": "11.1.1"
+    }
   }
 }

@@ -1,0 +1,66 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "SampleOverviewHeading",
+  "position": {
+    "x": 24,
+    "y": 16,
+    "z": 0,
+    "width": 1232,
+    "height": 96,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Atlyn Process Lens | Synthetic support tickets",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "22px",
+                      "fontWeight": "bold",
+                      "color": "#172B4D"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "01 / ALL VARIANTS     •     Prepared workflow frequency     •     Source fixture: 6 cases / 30 events / 24 transitions",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "13px",
+                      "fontWeight": "normal",
+                      "color": "#172B4D"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Atlyn Process Lens | Synthetic support tickets 01 / ALL VARIANTS     •     Prepared workflow frequency     •     Source fixture: 6 cases / 30 events / 24 transitions'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

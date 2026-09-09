@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
   "name": "PreparedTransitionTable",
   "position": {
-    "x": 24,
-    "y": 24,
-    "z": 0,
-    "height": 672,
-    "width": 1232,
-    "tabOrder": 0
+    "x": 852,
+    "y": 446,
+    "z": 3,
+    "width": 404,
+    "height": 250,
+    "tabOrder": 3
   },
   "visual": {
     "visualType": "tableEx",
@@ -16,38 +16,205 @@
         "Values": {
           "projections": [
             {
-              "field": { "Column": { "Expression": { "SourceRef": { "Entity": "Prepared Transitions" } }, "Property": "rowKey" } },
-              "queryRef": "Prepared Transitions.rowKey",
-              "nativeQueryRef": "rowKey"
-            },
-            {
-              "field": { "Column": { "Expression": { "SourceRef": { "Entity": "Prepared Transitions" } }, "Property": "source" } },
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Prepared Transitions"
+                    }
+                  },
+                  "Property": "source"
+                }
+              },
               "queryRef": "Prepared Transitions.source",
-              "nativeQueryRef": "source"
+              "nativeQueryRef": "source",
+              "displayName": "Source"
             },
             {
-              "field": { "Column": { "Expression": { "SourceRef": { "Entity": "Prepared Transitions" } }, "Property": "target" } },
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Prepared Transitions"
+                    }
+                  },
+                  "Property": "target"
+                }
+              },
               "queryRef": "Prepared Transitions.target",
-              "nativeQueryRef": "target"
+              "nativeQueryRef": "target",
+              "displayName": "Target"
             },
             {
-              "field": { "Column": { "Expression": { "SourceRef": { "Entity": "Prepared Transitions" } }, "Property": "variant" } },
-              "queryRef": "Prepared Transitions.variant",
-              "nativeQueryRef": "variant"
-            },
-            {
-              "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "Prepared Transitions" } }, "Property": "Prepared Frequency" } },
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Prepared Transitions"
+                    }
+                  },
+                  "Property": "Prepared Frequency"
+                }
+              },
               "queryRef": "Prepared Transitions.Prepared Frequency",
-              "nativeQueryRef": "Prepared Frequency"
+              "nativeQueryRef": "Prepared Frequency",
+              "displayName": "Frequency"
             },
             {
-              "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "Prepared Transitions" } }, "Property": "Prepared Duration" } },
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Prepared Transitions"
+                    }
+                  },
+                  "Property": "Prepared Duration"
+                }
+              },
               "queryRef": "Prepared Transitions.Prepared Duration",
-              "nativeQueryRef": "Prepared Duration"
+              "nativeQueryRef": "Prepared Duration",
+              "displayName": "Mean (h)"
             }
           ]
         }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Prepared Transitions"
+                  }
+                },
+                "Property": "source"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": false
       }
+    },
+    "objects": {
+      "grid": [
+        {
+          "properties": {
+            "rowPadding": {
+              "expr": {
+                "Literal": {
+                  "Value": "5"
+                }
+              }
+            },
+            "textSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "total": [
+        {
+          "properties": {
+            "totals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'All variants · guarded edge values'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#172B4D'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Native model-bound table for comparison with the custom visual. Duration is blank for model groups containing more than one prepared row.'"
+                }
+              }
+            }
+          }
+        }
+      ]
     },
     "drillFilterOtherVisuals": true
   }

@@ -12,13 +12,14 @@
   padding: 12px;
   overflow-wrap: anywhere;
   * { box-sizing: border-box; }
-  h2 { font-size: 19px; margin: 0; }
+  h2 { font-size: 18px; margin: 0; letter-spacing: -0.3px; }
   h3 { font-size: 14px; margin: 4px 0; }
   p { margin: 6px 0; }
-  header { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-block-end: 10px; }
+  header { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-block-end: 4px; }
+  header span { font-size: 11px; }
   button, input, select {
     font: inherit; color: var(--fg); background: var(--bg);
-    border: 1px solid var(--fg); border-radius: 3px; min-height: 30px;
+    border: 1px solid var(--fg); border-radius: 5px; min-height: 36px;
     max-width: 100%;
   }
   button { cursor: pointer; padding: 4px 8px; margin: 2px; }
@@ -30,31 +31,40 @@
   .controls label { flex: 1 1 160px; }
   .summary { font-weight: 600; }
   .completeness { border-inline-start: 4px solid var(--accent); padding-inline-start: 8px; }
-  .partial, .diagnostics, .fatal { border: 1px solid var(--fg); padding: 8px; }
+  .partial, .fatal { border: 1px solid var(--fg); padding: 6px; }
+  .diagnostics { border-inline-start: 3px solid var(--accent); padding-inline-start: 8px; }
   .partial { font-weight: 700; }
   .interaction-error:empty { display: none; }
   .interaction-error { border: 2px solid var(--fg); padding: 8px; }
-  .note, .legend, .provenance { font-size: 11px; }
+  .note, .legend, .provenance, .aggregate-note, .view-summary, .ranked-note, .dense-note, .local-context { font-size: 11px; }
+  .local-context { font-weight: 600; }
+  .provenance { max-height: 42px; overflow: auto; }
+  .controls-panel { border-block: 1px solid var(--fg); margin-block: 5px; }
+  .controls-panel[open] { padding-block-end: 8px; }
+  .panel-tabs { display: flex; flex-wrap: wrap; gap: 4px; margin-block: 4px; }
+  .panel-tabs button[aria-pressed="true"] { border-block-end: 3px solid var(--accent); font-weight: 700; }
+  .first-run, .empty { padding: 12px; border: 1px solid var(--fg); font-size: 14px; }
+  .micro-guidance { display: none; }
   summary { cursor: pointer; padding: 4px 0; font-weight: 600; }
-  .lens-body { display: flex; flex-wrap: wrap; gap: 16px; align-items: start; }
-  .graph-section { flex: 2 1 380px; min-width: 0; }
-  .data-section { flex: 1 1 340px; min-width: 0; }
-  .graph-scroll { width: 100%; height: 390px; overflow: auto; border: 1px solid var(--fg); margin-block-start: 8px; direction: ltr; }
+  .lens-body { display: block; }
+  [hidden] { display: none !important; }
+  .graph-section, .data-section { width: 100%; min-width: 0; }
+  .graph-section > h3 { display: none; }
+  .graph-section > label { flex-direction: row; align-items: center; max-width: 320px; }
+  .graph-section > label input { min-width: 180px; width: 230px; }
+  .graph-scroll { width: 100%; height: 300px; overflow: auto; border: 1px solid var(--fg); margin-block-start: 4px; direction: ltr; touch-action: pan-x pan-y; }
   .process-graph { display: block; max-width: none; margin: auto; background: var(--bg); }
   .edge-line { fill: none; stroke: var(--edge); }
   .edge-arrow { fill: var(--edge); pointer-events: none; }
   .edge-hit { fill: none; stroke: transparent; cursor: pointer; }
   .edge-label { fill: var(--fg); font-size: 12px; paint-order: stroke; stroke: var(--bg); stroke-width: 4px; stroke-linejoin: round; pointer-events: none; }
   .activity { cursor: pointer; }
-  .activity circle { fill: var(--bg); stroke: var(--node); stroke-width: 3px; }
-  .node-number { fill: var(--fg); font-weight: 700; font-size: 14px; }
-  .node-label { fill: var(--fg); font-size: 12px; paint-order: stroke; stroke: var(--bg); stroke-width: 4px; }
-  .small-graph .node-label, .small-graph .edge-label { font-size: 19px; }
-  .small-graph .node-number { font-size: 18px; }
-  .activity.focused circle { stroke-width: 6px; stroke-dasharray: 4 2; }
+  .activity rect { fill: var(--bg); stroke: var(--node); stroke-width: 2px; }
+  .node-label { fill: var(--fg); font-size: 13px; font-weight: 600; pointer-events: none; }
+  .activity.focused rect { stroke-width: 4px; stroke-dasharray: 4 2; }
   .edge:hover .edge-line, .edge.selected .edge-line { stroke: var(--accent); }
   .edge.selected .edge-arrow { fill: var(--accent); }
-  .activity.selected circle { stroke: var(--accent); stroke-width: 6px; }
+  .activity.selected rect { stroke: var(--accent); stroke-width: 4px; }
   .muted, .search-muted { opacity: 0.3; }
   button.selected { border: 3px solid var(--accent); font-weight: 700; }
   .table-scroll { max-height: 460px; overflow: auto; width: 100%; }
@@ -69,9 +79,33 @@
   .legal pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 220px; overflow: auto; }
   &.high-contrast {
     .muted, .search-muted { opacity: 1; }
-    .muted .edge-line, .search-muted circle { stroke-dasharray: 2 4; }
+    .muted .edge-line, .search-muted rect { stroke-dasharray: 2 4; }
     .selected .edge-line { stroke-width: 10px; }
     * { forced-color-adjust: none; }
+  }
+  &.compact {
+    padding: 6px;
+    h2 { font-size: 14px; }
+    header span, .aggregate-note { display: none; }
+    > .summary, > .provenance { display: none; }
+    p, .panel-tabs { margin-block: 3px; }
+    .completeness { font-size: 10px; }
+    .controls-panel { font-size: 11px; margin-block: 2px; }
+    .diagnostics summary { padding-block: 1px; }
+    .graph-section > label { font-size: 10px; min-height: 28px; }
+    .panel-tabs button { min-height: 24px; font-size: 10px; padding: 2px 5px; }
+    .provenance { max-height: 28px; font-size: 10px; }
+  }
+  &.micro {
+    padding: 4px;
+    h2 { font-size: 11px; }
+    > .summary { display: block; }
+    .summary, .completeness { font-size: 9px; margin: 0; }
+    .completeness { border: 0; padding: 0; }
+    > button { min-height: 24px; padding: 1px 4px; font-size: 10px; margin: 2px 0 0; }
+    .graph-section, .provenance, .aggregate-note, .view-summary { display: none; }
+    .micro-guidance { display: block; font-size: 10px; }
+    .controls-panel, .panel-tabs { margin-block-start: 8px; }
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }

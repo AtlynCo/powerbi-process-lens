@@ -52,6 +52,7 @@ copyFileSync("THIRD-PARTY-NOTICES.txt", join("dist", "THIRD-PARTY-NOTICES.txt"))
 const evidence = {
   package: resolve(file), guid: payload.visual.guid, version: payload.visual.version,
   apiVersion: payload.apiVersion, sha256: hash, bytes: bytes.length,
+  payloadSha256: createHash("sha256").update(JSON.stringify(payload)).digest("hex"),
   javascriptBytes: Buffer.byteLength(payload.content.js), cssBytes: Buffer.byteLength(payload.content.css),
   entries, privileges: payload.capabilities.privileges,
   offlineSignatureAudit: "pass (heuristic; not Microsoft certification)",

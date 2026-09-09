@@ -7,3 +7,6 @@ playwright-report/
 *.log
 *.pbix
 .pbi/
+/samples/SupportTickets/SupportTickets.Report/CustomVisuals/
+/samples/SupportTickets/ReleasePackage/
+/samples/SupportTickets/package-manifest.json

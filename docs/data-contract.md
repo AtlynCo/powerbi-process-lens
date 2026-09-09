@@ -78,3 +78,11 @@ These are visual bounds, not promises about total source-model cardinality. A re
 - Host selections can cross-filter other visuals according to report interaction settings. Local selected-state highlighting is separate from incoming categorical highlights.
 - The accepted contract deliberately uses `supportsHighlight: false`: host cross-filtering and local selected-row highlighting are supported, but this table mapping does not expose incoming highlight measures.
 - Cycles, reciprocal transitions, and self-loops are valid structure, not evidence of errors or causality.
+
+The graph places strongly connected groups by topological rank. Positions and route lanes depend on the full accepted topology, not hover, host selection, local focus or the selected variant; they may legitimately change when the host supplies different topology. Same-direction prepared contributors form one rendered edge with additive frequency and all identities. This is not an independent parallel-edge-type visualization.
+
+Duration width and the largest-duration note compare only the available supplied statistics in the visible received subset. They do not rank unreceived data or prove causal bottlenecks. A zero width metric uses a thin dashed edge, preserving its topology; an unavailable metric is explicitly `n/a`, never silently zero.
+
+Long activity and metric labels are abbreviated on the map; full labels, values and units remain in native tooltips and the accessible table. This display abbreviation does not alter stored values, edge widths or selection identities.
+
+Local query, focus, supplied variant, traversal mode, overlay, zoom and graph/table choice can be persisted through `navigation.state`. The state is validated, cannot add data or execute code, and is separate from native report selections. Missing activities/variants after host filtering reset those local choices. Actual Power BI bookmarks and save/reopen need native acceptance.

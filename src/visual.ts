@@ -5,6 +5,7 @@ import { addIssue, LIMITS } from "./model";
 import { translator } from "./i18n";
 import { DEFAULTS, formattingModel, readSettings, type Settings } from "./settings";
 import { ProcessView } from "./view";
+import { parseNavigation } from "./navigation";
 import "../style/visual.less";
 
 type Host = powerbi.extensibility.visual.IVisualHost;
@@ -31,6 +32,8 @@ export class Visual implements powerbi.extensibility.visual.IVisual {
   private alive = true;
   private revision = 0;
   private actionRevision = 0;
+  private lastNavigation: unknown;
+  private navigationInitialized = false;
 
   constructor(options?: powerbi.extensibility.visual.VisualConstructorOptions) {
     if (!options) throw new Error("Process Lens requires host constructor options.");
@@ -55,28 +58,51 @@ export class Visual implements powerbi.extensibility.visual.IVisual {
           { x: point[0] ?? 0, y: point[1] ?? 0 }
         ));
       },
-      tooltip: (rows, dataItems, coordinates) => {
-        if (this.host.tooltipService.enabled()) this.host.tooltipService.show({
-          coordinates, dataItems, identities: this.rowIds(rows), isTouchEvent: false
+      tooltip: (rows, dataItems, coordinates, touch = false) => {
+        this.tooltipAction(() => {
+          if (this.host.tooltipService.enabled()) this.host.tooltipService.show({
+            coordinates, dataItems, identities: this.rowIds(rows), isTouchEvent: touch
+          });
         });
       },
-      hideTooltip: () => this.host.tooltipService.hide({ immediately: true, isTouchEvent: false }),
+      hideTooltip: () => this.tooltipAction(() => this.host.tooltipService.hide({ immediately: true, isTouchEvent: false })),
       format: (value, role) => this.format(value, role),
-      extraTooltips: rows => this.extraTooltips(rows)
+      extraTooltips: rows => this.extraTooltips(rows),
+      expand: () => {
+        if (this.host.hostCapabilities.allowInteractions === false) {
+          this.view.showError(t("interactionsDisabled")); return;
+        }
+        try { this.host.switchFocusModeState(true); } catch (error) { this.showInteractionError(error); }
+      },
+      persist: navigation => {
+        if (this.host.hostCapabilities.allowInteractions === false) return;
+        try {
+          this.host.persistProperties({ merge: [{ objectName: "navigation", selector: {}, properties: { state: JSON.stringify(navigation) } }] });
+        } catch (error) { this.showInteractionError(error); }
+      }
     });
     this.selection.registerOnSelectCallback(() => { if (this.alive) this.syncSelection(); });
   }
 
   public update(options: Update): void {
+    // Host callbacks arriving after disposal must not resurrect DOM or start exports.
+    if (!this.alive) return;
     this.host.eventService.renderingStarted(options);
     try {
-      if (!this.alive) throw new Error("Visual was destroyed.");
+      this.view.setViewport(options.viewport.width, options.viewport.height);
       const data = options.dataViews?.[0];
       // Resize/style-only updates may omit dataViews; data updates without rows reset state.
       if (data || (options.type & 2) !== 0 || !this.model) {
         this.revision++;
         this.settings = readSettings(data?.metadata.objects);
         this.model = readDataView(data, this.settings);
+        const token = data?.metadata.objects?.navigation?.state;
+        const navigation = parseNavigation(token);
+        if (!this.navigationInitialized || this.lastNavigation !== token) {
+          this.view.restoreNavigation(navigation.value);
+          this.lastNavigation = token; this.navigationInitialized = true;
+        }
+        if (navigation.invalid) addIssue(this.model.issues, "navigationInvalid");
         this.ids.clear();
         const input = data?.table;
         this.table = input ? {
@@ -153,9 +179,12 @@ export class Visual implements powerbi.extensibility.visual.IVisual {
   }
   private syncSelection(): void {
     const selected = this.selection.getSelectionIds().filter(isSelectionId);
+    const selectedKeys = new Set(selected.map(id => id.getKey()));
+    const known = new Set([...this.ids.values()].map(id => id.getKey()));
+    const broader = selected.filter(id => !known.has(id.getKey()));
     const rows = new Set<number>();
     for (const [index, id] of this.ids) {
-      if (selected.some(selection => selection.equals(id) || selection.includes(id))) rows.add(index);
+      if (selectedKeys.has(id.getKey()) || broader.some(selection => selection.includes(id))) rows.add(index);
     }
     this.view.updateSelection(rows);
   }
@@ -172,12 +201,19 @@ export class Visual implements powerbi.extensibility.visual.IVisual {
     }).then(() => {
       if (current()) { this.view.showError(""); this.syncSelection(); }
     }, error => {
-      if (current()) this.view.showError(`${translator(this.host.locale || "en-US")("actionError")}: ${error instanceof Error ? error.message : String(error)}`);
+      if (this.alive && revision === this.revision) this.showInteractionError(error);
     });
   }
+  private showInteractionError(error: unknown): void {
+    this.view.showError(`${translator(this.host.locale || "en-US")("actionError")}: ${error instanceof Error ? error.message : String(error)}`);
+  }
+  private tooltipAction(action: () => void): void {
+    try { action(); } catch (error) { this.showInteractionError(error); }
+  }
   public destroy(): void {
+    if (!this.alive) return;
     this.alive = false;
-    this.host.tooltipService.hide({ immediately: true, isTouchEvent: false });
+    this.tooltipAction(() => this.host.tooltipService.hide({ immediately: true, isTouchEvent: false }));
     this.view.destroy();
     this.ids.clear();
     this.table = undefined;
