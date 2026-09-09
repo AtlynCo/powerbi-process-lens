@@ -2,7 +2,7 @@ export const LIMITS = Object.freeze({ rows: 2000, nodes: 80, edges: 300, idLengt
 
 export type IssueCode = "binding" | "invalidId" | "invalidVariant" | "invalidFrequency" |
   "invalidDuration" | "durationMetadata" | "duplicateDuration" | "variantDuration" |
-  "overflow" | "rowLimit" | "graphLimit" | "hostPartial" | "identity" | "segment";
+  "overflow" | "rowLimit" | "graphLimit" | "hostPartial" | "identity" | "segment" | "navigationInvalid";
 
 export interface Issue { code: IssueCode; count: number }
 export interface MetricSpec { statistic: string; unit: string; provenance: string }

@@ -1,40 +1,11 @@
 import { test, expect, type Page } from "@playwright/test";
-import { readdirSync, readFileSync } from "node:fs";
-import { join } from "node:path";
-import JSZip from "jszip";
-import { installHost, fixture } from "./host";
+import { readFileSync } from "node:fs";
+import { fixture } from "./host";
 import type powerbi from "powerbi-visuals-api";
-
-let javascript: string;
-let css: string;
-test.beforeAll(async () => {
-  const packageName = readdirSync("dist").find(name => name.endsWith(".pbiviz"));
-  if (!packageName) throw new Error("Run npm run package before browser tests.");
-  const zip = await JSZip.loadAsync(readFileSync(join("dist", packageName)));
-  const resource = Object.keys(zip.files).find(name => name.startsWith("resources/") && name.endsWith(".pbiviz.json"));
-  if (!resource) throw new Error("No packaged visual resource.");
-  const file = zip.file(resource);
-  if (!file) throw new Error("Resource entry missing.");
-  const payload = JSON.parse(await file.async("string"));
-  javascript = payload.content.js;
-  css = payload.content.css;
-});
+import { controlsPanel, diagnosticPanel, openPackage, tablePanel } from "./packageHarness";
 
 async function boot(page: Page, options = { locale: "en-US", highContrast: false }, data = fixture()): Promise<void> {
-  await page.route("**/*", route => route.abort());
-  await page.setContent('<div id="visual" style="width:1200px;height:950px"></div>');
-  await page.evaluate(() => { Object.defineProperty(window, "powerbi", { value: { visuals: { plugins: {} } }, writable: true, configurable: true }); });
-  await page.evaluate(installHost, options);
-  await page.addStyleTag({ content: css });
-  await page.addScriptTag({ content: javascript });
-  await page.evaluate(dataView => {
-    const plugin = Object.values(window.powerbi.visuals.plugins)[0];
-    const element = document.getElementById("visual");
-    if (!plugin || !element) throw new Error("Packaged plugin registration absent.");
-    window.visual = plugin.create({ element, host: window.host });
-    window.visual.update({ viewport: { width: 1200, height: 950 }, type: 2, dataViews: [dataView] });
-  }, data);
-  await expect(page.locator(".fatal")).toHaveCount(0);
+  await openPackage(page, { ...options, data, width: 1200, height: 950 });
 }
 async function update(page: Page, data: powerbi.DataView, operationKind = 0): Promise<void> {
   await page.evaluate(({ data, operationKind }) => {
@@ -51,7 +22,7 @@ test("packaged graph retains cycles, correct arrows and bounded real geometry wi
   await expect(page.locator(".edge-line")).toHaveCount(7);
   await expect(page.locator(".edge-arrow")).toHaveCount(7);
   await expect(page.locator(".activity")).toHaveCount(6);
-  await expect(page.locator('[data-issue="variantDuration"]')).toBeVisible();
+  await expect(page.locator('[data-issue="variantDuration"]')).toHaveCount(1);
   const geometry = await page.locator(".process-graph").evaluate(svg => {
     const box = svg.getBoundingClientRect();
     return [...svg.querySelectorAll<SVGPathElement>(".edge-line")].map(path => {
@@ -75,6 +46,7 @@ test("packaged graph retains cycles, correct arrows and bounded real geometry wi
 
 test("all represented identities selected; host callbacks and hover never move the layout", async ({ page }) => {
   await boot(page);
+  await tablePanel(page);
   const before = await page.locator(".edge-line").evaluateAll(nodes => nodes.map(node => node.getAttribute("d")));
   const select = page.locator('tr[data-edge=\'["Investigate","Resolved",""]\'] button').first();
   await select.click();
@@ -94,6 +66,8 @@ test("all represented identities selected; host callbacks and hover never move t
 
 test("keyboard selections, per-row and grouped native menus, focus and clear work", async ({ page }) => {
   await boot(page);
+  await tablePanel(page);
+  await controlsPanel(page);
   const select = page.locator('tr[data-edge=\'["Investigate","Resolved",""]\'] button').first();
   await select.focus();
   await page.keyboard.press("Enter");
@@ -110,6 +84,7 @@ test("keyboard selections, per-row and grouped native menus, focus and clear wor
 
 test("variant and local focus filter correctly without implicit host selection", async ({ page }) => {
   await boot(page);
+  await controlsPanel(page);
   const before = await page.locator('.activity[data-activity="Investigate"]').getAttribute("transform");
   await page.locator('[data-focus="variant"]').selectOption({ label: "follow-up" });
   await expect(page.locator(".edge-line")).toHaveCount(3);
@@ -134,6 +109,8 @@ test("host replacement/reset, resize-only update, invalid data and missing ident
   data.metadata.segment = {};
   if (data.table) data.table.identity = [];
   await update(page, data, 1);
+  await tablePanel(page);
+  await diagnosticPanel(page);
   await expect(page.locator(".edge-line")).toHaveCount(1);
   await expect(page.locator(".completeness")).toContainText("INCOMPLETE");
   for (const code of ["hostPartial", "invalidDuration", "invalidFrequency", "identity", "segment"]) {
@@ -147,6 +124,7 @@ test("host replacement/reset, resize-only update, invalid data and missing ident
 
 test("resize preserves expanded keyboard controls and hides stale host tooltips", async ({ page }) => {
   await boot(page);
+  await tablePanel(page);
   await page.locator(".data-section > details > summary").click();
   const activity = page.locator('.activities-list li[data-activity="Investigate"] button').last();
   await activity.focus();
@@ -161,7 +139,7 @@ test("resize preserves expanded keyboard controls and hides stale host tooltips"
   await page.evaluate(() => window.visual.update({ viewport: { width: 1000, height: 800 }, type: 4, dataViews: [] }));
   await expect(inputRow).toBeFocused();
   await update(page, fixture([]));
-  await expect(page.locator('[data-focus="activity"]')).toBeFocused();
+  await expect(page.locator(".empty")).toBeFocused();
 });
 
 test("duplicate duration diagnostics preserve frequency and all row identities in the actual payload", async ({ page }) => {
@@ -170,12 +148,15 @@ test("duplicate duration diagnostics preserve frequency and all row identities i
     ["A", "B", 6, 99, "v", "1", "Second"],
     ["B", "B", 0, 0, "v", "2", "Zero"]
   ]));
+  await tablePanel(page);
+  await controlsPanel(page);
+  await diagnosticPanel(page);
   await expect(page.locator('[data-issue="duplicateDuration"]')).toBeVisible();
   await expect(page.locator("tbody tr").first()).toContainText("10");
   await page.locator("tbody tr").first().getByRole("button", { name: /Select represented rows/ }).click();
   await expect.poll(() => page.evaluate(() => window.harness.selections.at(-1))).toEqual(["row-0", "row-1"]);
   await page.locator('[data-focus="overlay"]').selectOption("duration");
-  await expect(page.locator(".edge-label").first()).toContainText("Unavailable");
+  await expect(page.locator(".edge-label").first()).toContainText("n/a");
   await expect(page.locator(".edge-line").first()).toHaveAttribute("stroke-dasharray", "5 4");
 });
 
@@ -184,6 +165,7 @@ test("maximum graph and row budgets remain bounded and render lifecycle complete
     `Activity ${index % 80}`, `Activity ${(index * 7 + 1) % 80}`, 1, 1, `v${Math.floor(index / 80)}`, String(index), "Team"
   ]);
   await boot(page, { locale: "en-US", highContrast: false }, fixture(rows));
+  await diagnosticPanel(page);
   await expect(page.locator(".completeness")).toContainText("INCOMPLETE");
   await expect(page.locator('[data-issue="rowLimit"]')).toBeVisible();
   await expect(page.locator('[data-issue="graphLimit"]')).toBeVisible();
@@ -195,12 +177,12 @@ test("maximum graph and row budgets remain bounded and render lifecycle complete
 test("high contrast, reduced motion, RTL, localization and tiny tiles remain usable", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await boot(page, { locale: "fr-FR", highContrast: true });
+  await controlsPanel(page);
   await expect(page.locator(".process-lens")).toHaveClass(/high-contrast/);
   await expect(page.locator(".controls")).toContainText("Frequence");
   expect(await page.locator(".edge-line").first().evaluate(node => getComputedStyle(node).stroke)).toBe("rgb(255, 255, 0)");
   await page.evaluate(() => {
-    const node = document.getElementById("visual");
-    if (node) { node.style.width = "220px"; node.style.height = "180px"; }
+    window.visual.update({ viewport: { width: 220, height: 180 }, type: 4, dataViews: [] });
   });
   const sizes = await page.locator(".process-lens").evaluate(node => ({ width: node.clientWidth, scroll: node.scrollWidth, height: node.clientHeight, scrollHeight: node.scrollHeight }));
   expect(sizes.scroll).toBeLessThanOrEqual(sizes.width + 1);
@@ -214,6 +196,7 @@ test("high contrast, reduced motion, RTL, localization and tiny tiles remain usa
 
 test("host refusal surfaces errors; unsafe labels remain text; formatting and teardown work", async ({ page }) => {
   await boot(page, { locale: "en-US", highContrast: false }, fixture([["<img src=x onerror=alert(1)>", "B", 10, 2, "v", "r", "<script>bad()</script>"]]));
+  await tablePanel(page);
   await expect(page.locator(".process-lens img, .process-lens script")).toHaveCount(0);
   await page.evaluate(() => { window.harness.rejectSelection = true; });
   await page.locator("tbody button").first().click();
@@ -227,6 +210,8 @@ test("host refusal surfaces errors; unsafe labels remain text; formatting and te
 
 test("host-disabled interactions never issue native selections or menus", async ({ page }) => {
   await boot(page);
+  await tablePanel(page);
+  await controlsPanel(page);
   await page.evaluate(() => {
     window.host.hostCapabilities.allowInteractions = false;
     window.visual.update({ viewport: { width: 1200, height: 950 }, type: 4, dataViews: [] });

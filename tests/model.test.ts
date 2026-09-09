@@ -116,7 +116,7 @@ describe("bounded local navigation and stable layout", () => {
   });
   it("keeps activity positions stable when variants or focus filter edges", () => {
     const filtered = graphView(result, null, "A", "neighbors");
-    expect(layoutGraph(result.nodes, filtered.edges).nodes).toEqual(layoutGraph(result.nodes, result.edges).nodes);
+    expect(layoutGraph(result.nodes, filtered.edges, result.edges).nodes).toEqual(layoutGraph(result.nodes, result.edges).nodes);
   });
   it("uses distinct curves for opposite directions and a visible self-loop", () => {
     const layout = layoutGraph(["A", "B"], model([row(0), row(1, "B", "A"), row(2, "A", "A")]).edges);

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 20 20" role="img" aria-labelledby="title">
+  <title id="title">Atlyn Process Lens: a lens around four connected activities</title>
+  <rect x="0" y="0" width="20" height="20" rx="3.2" fill="#0b1630"/>
+  <line x1="13.8" y1="13.8" x2="17.1" y2="17.1" stroke="#edf4fc" stroke-width="2.1" stroke-linecap="round"/>
+  <circle cx="9" cy="9" r="6.7" fill="none" stroke="#edf4fc" stroke-width="1.15"/>
+  <line x1="5.5" y1="9" x2="9" y2="5.5" stroke="#3fd5ba" stroke-width="0.75" stroke-linecap="round"/>
+  <line x1="9" y1="5.5" x2="12.5" y2="9" stroke="#3fd5ba" stroke-width="0.75" stroke-linecap="round"/>
+  <line x1="12.5" y1="9" x2="9" y2="12.5" stroke="#3fd5ba" stroke-width="0.75" stroke-linecap="round"/>
+  <line x1="9" y1="12.5" x2="5.5" y2="9" stroke="#3fd5ba" stroke-width="0.75" stroke-linecap="round"/>
+  <line x1="10.9" y1="6.1" x2="11" y2="7.5" stroke="#3fd5ba" stroke-width="0.6" stroke-linecap="round"/>
+  <line x1="9.6" y1="7.4" x2="11" y2="7.5" stroke="#3fd5ba" stroke-width="0.6" stroke-linecap="round"/>
+  <rect x="4.4" y="7.9" width="2.2" height="2.2" rx="0.45" fill="#7deedb"/>
+  <rect x="7.9" y="4.4" width="2.2" height="2.2" rx="0.45" fill="#7deedb"/>
+  <rect x="11.4" y="7.9" width="2.2" height="2.2" rx="0.45" fill="#7deedb"/>
+  <rect x="7.9" y="11.4" width="2.2" height="2.2" rx="0.45" fill="#7deedb"/>
+</svg>

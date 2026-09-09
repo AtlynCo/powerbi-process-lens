@@ -1,0 +1,131 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "VariantCycleNotes",
+  "position": {
+    "x": 852,
+    "y": 128,
+    "z": 2,
+    "width": 404,
+    "height": 302,
+    "tabOrder": 2
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Inspect the reciprocal cycle",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "22px",
+                      "fontWeight": "bold",
+                      "color": "#172B4D"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Triage → Waiting: mean 1.75 hours.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "13px",
+                      "fontWeight": "normal",
+                      "color": "#172B4D"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Waiting → Triage: mean 2.50 hours.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "13px",
+                      "fontWeight": "normal",
+                      "color": "#172B4D"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Triage → Resolved: mean 3.50 hours.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "13px",
+                      "fontWeight": "normal",
+                      "color": "#172B4D"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Every edge has frequency 2. The page filter limits the model query to V02.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "13px",
+                      "fontWeight": "normal",
+                      "color": "#172B4D"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Elapsed time is not hands-on work or a causal bottleneck.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "13px",
+                      "fontWeight": "normal",
+                      "color": "#172B4D"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "A cycle is observable here; its business meaning is not inferred.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "13px",
+                      "fontWeight": "normal",
+                      "color": "#172B4D"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Inspect the reciprocal cycle Triage → Waiting: mean 1.75 hours. Waiting → Triage: mean 2.50 hours. Triage → Resolved: mean 3.50 hours. Every edge has frequency 2. The page filter limits the model query to V02. Elapsed time is not hands-on work or a causal bottleneck. A cycle is observable here; its business meaning is not inferred.'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Atlyn Process Lens sample",
+  "dataColors": [
+    "#27698C",
+    "#258470",
+    "#9364A6",
+    "#BC7737"
+  ],
+  "background": "#F4F7FB",
+  "foreground": "#172B4D",
+  "tableAccent": "#27698C"
+}

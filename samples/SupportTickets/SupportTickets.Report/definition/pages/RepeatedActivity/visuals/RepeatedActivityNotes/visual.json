@@ -1,0 +1,131 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "RepeatedActivityNotes",
+  "position": {
+    "x": 852,
+    "y": 128,
+    "z": 2,
+    "width": 404,
+    "height": 302,
+    "tabOrder": 2
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Inspect the self-loop",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "22px",
+                      "fontWeight": "bold",
+                      "color": "#172B4D"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Triage → Triage: frequency 2; mean 0.25 hours.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "13px",
+                      "fontWeight": "normal",
+                      "color": "#172B4D"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "One interval is zero; the other is 0.50 hours.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "13px",
+                      "fontWeight": "normal",
+                      "color": "#172B4D"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Distinct sequence values order the equal-time events.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "13px",
+                      "fontWeight": "normal",
+                      "color": "#172B4D"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "The page filter limits the model query to V03.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "13px",
+                      "fontWeight": "normal",
+                      "color": "#172B4D"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Repeated activity is not automatically rework, an error, or a reopened case.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "13px",
+                      "fontWeight": "normal",
+                      "color": "#172B4D"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Prepared values are supplied statistics; the visual does not recompute them.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "13px",
+                      "fontWeight": "normal",
+                      "color": "#172B4D"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Inspect the self-loop Triage → Triage: frequency 2; mean 0.25 hours. One interval is zero; the other is 0.50 hours. Distinct sequence values order the equal-time events. The page filter limits the model query to V03. Repeated activity is not automatically rework, an error, or a reopened case. Prepared values are supplied statistics; the visual does not recompute them.'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

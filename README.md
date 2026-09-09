@@ -10,11 +10,15 @@ A Power BI custom visual for **analysis of prepared process maps**. It displays 
 
 ## What it shows
 
-- A deterministic, bounded, synchronous circular layout retaining reciprocal edges, cycles, and genuine self-loops.
+- A deterministic, bounded, synchronous directed layout: strongly connected activity groups retain reciprocal edges, cycles, and genuine self-loops. Obstacle-aware routes avoid misleading connections through unrelated activities.
 - Frequency and, only where unambiguous, the supplied duration statistic. Duplicate prepared records retain additive frequency but make duration unavailable; no runtime averaging or weighted mode.
 - Local activity search, focus, graph traversal, and supplied-variant filtering. These are navigation aids, not causal or path discovery.
 - A keyboard-operable activity list and transition table, row-aware host selection, native tooltip integration, and context-menu actions.
 - Received-subset and invalid-data diagnostics rather than silent claims of completeness.
+
+Activity names are shown on the map. Clicking an activity changes **local focus**, never report selection. Use **Explore and select** for search, traversal, supplied variants, overlay and zoom; use **Activities and transitions** for keyboard-operable full labels and explicit native selections. Reciprocal metrics have separate labels. Dense maps retain their received topology but need zoom, focus or the table for readable detail. Tiny tiles offer **Expand** (a host focus-mode request) instead of a clipped, unreadable graph.
+
+Local navigation is serialized in the hidden `navigation.state` property for host persistence/bookmarks. Native bookmark and focus-mode interoperability remains an explicit acceptance gate, not a browser-harness claim.
 
 The accepted interaction contract supports host cross-filtering and local highlighting of selected rows and their represented items. The table data mapping **does not carry categorical incoming highlight measures** (`supportsHighlight: false`); do not describe this as incoming cross-highlight support.
 
@@ -50,11 +54,11 @@ The repository includes:
 
 - [Prepared transition CSV](samples/prepared-transitions.csv): the **only** sample data the report/visual loads.
 - [Synthetic ordered events](samples/events.csv) and [explicit variant paths](samples/variants.json): inputs to an **offline-only** Node preprocessing script, not visual data roles.
-- [Power BI Project source](samples/SupportTickets/SupportTickets.pbip): a local CSV semantic model in TMDL and a native table report in PBIR.
+- [Power BI Project source](samples/SupportTickets/SupportTickets.pbip): source-authored offline TMDL/PBIR with bound Process Lens pages and native comparison data.
 
 The example has 30 events, six synthetic tickets, three supplied variants, five activities, and 24 adjacent transitions prepared into 12 rows. It includes `Triage → Waiting → Triage` and `Triage → Triage`. Elapsed adjacent-event time totals 41 hours. Ticket counts come from the offline fixture, not graph inference.
 
-The PBIP is source-authored and has **not been opened or refreshed in native Power BI Desktop**. It deliberately contains a native table, not fabricated custom-visual binding metadata. Change its local `CsvPath` parameter, open and refresh in Desktop, then import the **actual packaged `.pbiviz`** and bind its roles manually. Follow [the sample guide](samples/README.md) for exact fields, format settings, expected values, and fallback instructions. No PBIX or product screenshots are supplied.
+The PBIP is source-authored and has **not been opened or refreshed in native Power BI Desktop**. The package synchronization command populates its generated custom-visual resources from the exact `.pbiviz`; the sealed release contains that fully populated report. Follow [the sample guide](samples/README.md) for preparation, bound fields and expected values. Source/schema checks do not substitute for actual Desktop import, rendering, offline refresh or conversion to the required `.pbix`.
 
 ## Development
 
@@ -71,6 +75,8 @@ npm run test:browser
 npm run audit:package
 npm run sample
 ```
+
+All checks are **local-only**. This repository has no GitHub Actions workflow or hosted CI/CD dependency. Do not run cloud agents, Codespaces or hosted workflow runs as a release check. An installed Edge can run the isolated package harness without installing another browser: `$env:PROCESS_LENS_BROWSER_CHANNEL='msedge'`.
 
 If Chromium is missing, run `npm run browser:install`; browser installation and execution use this worktree's ignored `.tmp/browsers`, not a shared browser cache. `npm run package` invokes the official Power BI visual tools through `scripts/package.mjs`. The wrapper creates an ephemeral development certificate with .NET `CertificateRequest` on Windows or OpenSSL elsewhere, scopes `HOME`/`USERPROFILE` to ignored `.tmp/package-home-*`, and removes that invocation's directory afterward. It does not write to certificate stores or change trust settings. No development server is required. This tooling certificate is not publisher signing or Microsoft certification.
 
@@ -97,7 +103,7 @@ node .\scripts\generate-icons.mjs
 node .\scripts\generate-icons.mjs --check
 ```
 
-The icon's [reviewable generator](scripts/generate-icons.mjs) uses only Node built-ins, including `zlib`, and produces an original 20×20 PNG and matching SVG. It is an icon, not a report screenshot.
+The [reviewable generator](scripts/generate-icons.mjs) uses only Node built-ins and produces original 20×20 icon and 300×300 logo PNG/SVG assets. Actual package-browser screenshots are captured at 1366×768 in ignored release evidence; they are not native Power BI screenshots.
 
 ## Boundaries and accessibility
 
@@ -111,8 +117,10 @@ Formatting exposes `appearance.edgeColor`, `appearance.nodeColor`, and `appearan
 
 The runtime is designed without external services, network requests, telemetry, authentication, or licensing checks; `privileges` is empty. The formatting dependency `powerbi-visuals-utils-formattingutils` is reviewable open-source code. This describes the custom visual runtime, not npm installation, Power BI's own services, the report's data source, or tenant policies.
 
-The project is **not represented as Microsoft-certified or publication-ready**. Privacy/legal materials, distribution terms, native-host validation, and genuine store media must be supplied or approved by the owner before publication. Support accuracy and responsiveness remain manual release gates. No certification, service level, licensing entitlement, or business outcome is promised here.
+The project is **not represented as Microsoft-certified or publication-ready**. Privacy/legal materials, distribution terms, pricing/license decisions, native-host validation, PBIX conversion and store-media approval remain owner gates. The coordinator alone manages Desktop/shared Service UI and live Marketplace submission. Support accuracy and responsiveness remain manual release gates. No certification, service level, licensing entitlement, competitive superiority or business outcome is promised here.
 
 Approved publisher/contact metadata: **Atlyn**, <atlyn.help@gmail.com>. Public support: <https://www.atlynco.com/docs/faq>; the coordinator verified its support content. Listing this contact does not promise mailbox monitoring or response times.
 
 Collaborator-only issue tracking: <https://github.com/AtlynCo/powerbi-process-lens/issues>. The private repository remains the approved source-repository link, **not a public support endpoint**. See the [publication checklist](docs/publication-checklist.md) and [host validation plan](docs/validation.md).
+
+See [the scoped comparison](docs/scoped-comparison.md), [current certification requirements](docs/certification-dossier.md), and [listing draft](docs/listing-dossier.md). Comparison research is not Marketplace listing copy.

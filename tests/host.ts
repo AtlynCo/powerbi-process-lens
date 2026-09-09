@@ -11,6 +11,8 @@ interface TestIdentity {
 interface TestHost {
   locale: string;
   hostCapabilities: { allowInteractions: boolean };
+  persistProperties(changes: powerbi.VisualObjectInstancesToPersist): void;
+  switchFocusModeState(value: boolean): void;
   colorPalette: {
     isHighContrast: boolean;
     foreground: { value: string };
@@ -49,6 +51,10 @@ interface HarnessState {
   tooltipHides: number;
   lifecycle: string[];
   rejectSelection: boolean;
+  rejectTooltip: boolean;
+  rejectContext: boolean;
+  persisted: powerbi.VisualObjectInstancesToPersist[];
+  focusRequests: boolean[];
   nativeSelect(keys: string[]): void;
 }
 declare global {
@@ -57,6 +63,7 @@ declare global {
     host: TestHost;
     harness: HarnessState;
     visual: HarnessVisual;
+    instances: { visual: HarnessVisual; host: TestHost; state: HarnessState }[];
   }
 }
 
@@ -74,22 +81,26 @@ export function installHost(options: { locale: string; highContrast: boolean }):
       hasIdentity: () => true
     };
   }
-  window.harness = {
+  const state: HarnessState = {
     selections: [], menus: [], tooltips: [], tooltipHides: 0, lifecycle: [], rejectSelection: false,
+    rejectTooltip: false, rejectContext: false, persisted: [], focusRequests: [],
     nativeSelect(keys) { selected = keys.map(identity); callback(); }
   };
+  window.harness = state;
   window.host = {
     locale: options.locale,
     hostCapabilities: { allowInteractions: true },
+    persistProperties(changes) { state.persisted.push(changes); },
+    switchFocusModeState(value) { state.focusRequests.push(value); },
     colorPalette: {
       isHighContrast: options.highContrast,
       foreground: { value: "#FFFF00" },
       background: { value: "#000000" }
     },
     eventService: {
-      renderingStarted() { window.harness.lifecycle.push("started"); },
-      renderingFinished() { window.harness.lifecycle.push("finished"); },
-      renderingFailed(_options, reason) { window.harness.lifecycle.push(`failed:${reason}`); }
+      renderingStarted() { state.lifecycle.push("started"); },
+      renderingFinished() { state.lifecycle.push("finished"); },
+      renderingFailed(_options, reason) { state.lifecycle.push(`failed:${reason}`); }
     },
     createSelectionIdBuilder() {
       return {
@@ -103,20 +114,21 @@ export function installHost(options: { locale: string; highContrast: boolean }):
     createSelectionManager() {
       return {
         async select(ids, multi) {
-          if (window.harness.rejectSelection) throw new Error("Synthetic host selection refusal");
+          if (state.rejectSelection) throw new Error("Synthetic host selection refusal");
           const before = new Map((multi ? selected : []).map(id => [id.getKey(), id]));
           for (const id of ids) {
             if (multi && before.has(id.getKey())) before.delete(id.getKey());
             else before.set(id.getKey(), id);
           }
           selected = [...before.values()];
-          window.harness.selections.push(ids.map(id => id.getKey()));
+          state.selections.push(ids.map(id => id.getKey()));
           callback();
           return selected;
         },
         async clear() { selected = []; callback(); },
         async showContextMenu(id, point) {
-          window.harness.menus.push({ key: "getKey" in id && typeof id.getKey === "function" ? id.getKey() : null, point });
+          if (state.rejectContext) throw new Error("Synthetic context refusal");
+          state.menus.push({ key: "getKey" in id && typeof id.getKey === "function" ? id.getKey() : null, point });
         },
         getSelectionIds() { return selected; },
         registerOnSelectCallback(value) { callback = value; }
@@ -124,8 +136,11 @@ export function installHost(options: { locale: string; highContrast: boolean }):
     },
     tooltipService: {
       enabled: () => true,
-      show(value) { window.harness.tooltips.push(value); },
-      hide() { window.harness.tooltipHides++; }
+      show(value) {
+        if (state.rejectTooltip) throw new Error("Synthetic tooltip refusal");
+        state.tooltips.push(value);
+      },
+      hide() { state.tooltipHides++; }
     }
   };
 }

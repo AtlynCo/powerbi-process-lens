@@ -1,9 +1,10 @@
 import type powerbi from "powerbi-visuals-api";
 import { activityRows, graphView, type Edge, type FocusMode, type GraphView, type ProcessModel } from "./model";
-import { layoutGraph } from "./layout";
+import { layoutGraph, NODE_SIZE, type EdgePosition, type Layout } from "./layout";
 import { isRtl, type Translate } from "./i18n";
 import type { Settings } from "./settings";
 import { THIRD_PARTY_NOTICES } from "./notices";
+import { MAX_ZOOM, type Navigation } from "./navigation";
 
 type Tooltip = powerbi.extensibility.VisualTooltipDataItem;
 export interface Actions {
@@ -12,10 +13,12 @@ export interface Actions {
   selectionHint(): string;
   clear(): void;
   menu(rows: number[], point: number[]): void;
-  tooltip(rows: number[], items: Tooltip[], point: number[]): void;
+  tooltip(rows: number[], items: Tooltip[], point: number[], touch?: boolean): void;
   hideTooltip(): void;
   format(value: powerbi.PrimitiveValue, role: string): string;
   extraTooltips(rows: number[]): Tooltip[];
+  persist(navigation: Navigation): void;
+  expand(): void;
 }
 export interface Theme { foreground: string; background: string; accent: string; highContrast: boolean }
 function element<K extends keyof HTMLElementTagNameMap>(tag: K, text?: string, className?: string): HTMLElementTagNameMap[K] {
@@ -41,18 +44,44 @@ export class ProcessView {
   private query = "";
   private overlay = "frequency";
   private zoom = 1;
+  private panel: "graph" | "table" = "graph";
   private visible?: GraphView;
   private content = element("div");
   private message = element("p");
   private selections = new Set<number>();
   private openDetails = new Set<string>();
+  private rowMappings = new WeakMap<HTMLElement | SVGElement, number[]>();
+  private viewport = { width: 1280, height: 620 };
+  private interactionError = "";
+  private layoutSignature = "";
+  private cachedLayout?: Layout;
+  private cachedRoutes = new Map<string, EdgePosition>();
 
   constructor(private root: HTMLElement, private t: Translate, private locale: string, private actions: Actions) {
     root.className = "process-lens";
     root.dir = isRtl(locale) ? "rtl" : "ltr";
     root.setAttribute("aria-label", t("title"));
+    root.textContent = t("awaiting");
+    root.addEventListener("contextmenu", event => {
+      if (!event.defaultPrevented) { event.preventDefault(); this.actions.menu([], this.coordinates(event.clientX, event.clientY)); }
+    });
   }
 
+  setViewport(width: number, height: number): void {
+    if (!Number.isFinite(width) || !Number.isFinite(height)) throw new Error("Invalid host viewport dimensions.");
+    this.viewport = { width: Math.max(0, width), height: Math.max(0, height) };
+    this.root.style.width = `${this.viewport.width}px`;
+    this.root.style.height = `${this.viewport.height}px`;
+    this.root.classList.toggle("compact", width < 600 || height < 450);
+    this.root.classList.toggle("micro", width < 180 || height < 140);
+  }
+  restoreNavigation(state: Navigation): void {
+    this.query = state.query; this.focus = state.focus; this.variant = state.variant;
+    this.mode = state.mode; this.overlay = state.overlay; this.zoom = state.zoom; this.panel = state.panel;
+  }
+  private persist(): void {
+    this.actions.persist({ query: this.query, focus: this.focus, variant: this.variant, mode: this.mode, overlay: this.overlay === "duration" ? "duration" : "frequency", zoom: this.zoom, panel: this.panel });
+  }
   render(model: ProcessModel, settings: Settings, theme: Theme): void {
     this.model = model;
     this.settings = settings;
@@ -78,22 +107,47 @@ export class ProcessView {
     this.root.style.setProperty("--edge", theme.highContrast ? theme.foreground : settings.edgeColor);
     this.root.style.setProperty("--node", theme.highContrast ? theme.foreground : settings.nodeColor);
     const heading = element("header");
-    heading.append(element("h2", this.t("title")), element("span", this.t("subtitle")));
+    heading.append(element("h2", this.t("shortTitle")), element("span", this.t("subtitle")));
     this.root.append(heading);
-    this.controls(model);
-    const summary = element("p", `${this.t("received")}: ${model.receivedRows} | ${this.t("accepted")}: ${model.acceptedRows} | ${this.t("activities")}: ${model.nodes.length}`, "summary");
-    this.root.append(summary, element("p", model.partial ? this.t("partial") : this.t("complete"), model.partial ? "completeness partial" : "completeness"));
+    if (this.viewport.width < 180 || this.viewport.height < 140) {
+      this.root.append(element("p", `${model.nodes.length} ${this.t("activities")}`, "summary"),
+        element("p", model.partial ? this.t("incomplete") : this.t("microReceived"), model.partial ? "completeness partial" : "completeness"));
+      const expand = this.button(this.t("expand"), "expand", () => this.actions.expand());
+      expand.setAttribute("aria-label", this.t("enlarge"));
+      this.message = element("p", this.interactionError, "interaction-error");
+      this.message.setAttribute("role", "alert");
+      this.root.append(expand, this.message);
+      return;
+    }
+    const compact = this.viewport.width < 600 || this.viewport.height < 450;
+    const summary = element("p", `${this.t("accepted")}: ${model.acceptedRows}/${model.receivedRows} | ${this.t("activities")}: ${model.nodes.length}`, "summary");
+    const completeness = element("p", model.partial ? this.t("partialShort") : this.t(compact ? "microReceived" : "complete"), model.partial ? "completeness partial" : "completeness");
+    completeness.title = model.partial ? this.t("partial") : this.t("complete");
+    this.root.append(summary, completeness);
+    if (this.variant !== null || this.focus !== null) {
+      this.root.append(element("p", [
+        this.variant !== null ? `${this.t("variant")}: ${this.variant || this.t("blank")}` : "",
+        this.focus !== null ? `${this.t("activity")}: ${this.focus} / ${this.t(this.mode)}` : ""
+      ].filter(Boolean).join(" | "), "local-context"));
+    }
+    if (model.edges.length) this.controls(model);
     const metric = model.hasDuration
       ? `${this.t("duration")}: ${model.metric.statistic || this.t("unspecified")} / ${model.metric.unit || this.t("unspecified")}. ${this.t("provenance")}: ${model.metric.provenance || this.t("unspecified")}`
       : `${this.t("duration")}: ${this.t("unbound")}`;
-    this.root.append(element("p", metric, "provenance"));
-    this.message = element("p", "", "interaction-error");
+    this.root.append(element("p", compact && model.hasDuration ? `${this.t("duration")}: ${model.metric.statistic || this.t("unspecified")} / ${model.metric.unit || this.t("unspecified")}` : metric, "provenance"));
+    this.message = element("p", this.interactionError, "interaction-error");
     this.message.setAttribute("role", "alert");
     this.root.append(this.message);
     this.content = element("div");
     this.root.append(this.content);
     this.renderContent();
-    this.root.append(element("p", this.t("local"), "note"), element("p", this.t("limitations"), "note"));
+    const interpretation = element("details", undefined, "interpretation");
+    interpretation.dataset.detail = "interpretation";
+    interpretation.open = this.openDetails.has("interpretation");
+    const explanation = element("summary", this.t("inspect"));
+    explanation.dataset.focus = "interpretation";
+    interpretation.append(explanation, element("p", metric), element("p", this.t("local"), "note"), element("p", this.t("limitations"), "note"), element("p", this.t("touchMenu"), "note"));
+    this.root.append(interpretation);
     const legal = element("details", undefined, "legal");
     legal.dataset.detail = "legal";
     legal.open = this.openDetails.has("legal");
@@ -112,18 +166,18 @@ export class ProcessView {
     this.root.scrollTo(rootScroll);
     if (focusKey) {
       const replacement = [...this.root.querySelectorAll<HTMLElement>("[data-focus]")].find(node => node.dataset.focus === focusKey);
-      (replacement ?? this.root.querySelector<HTMLElement>('[data-focus="activity"]'))?.focus({ preventScroll: true });
+      (replacement ?? this.root.querySelector<HTMLElement>('[data-focus="explore"], .empty, .first-run'))?.focus({ preventScroll: true });
       if (replacement instanceof HTMLInputElement && replacement.type === "search" && selectionStart !== null) {
         replacement.setSelectionRange(selectionStart, selectionEnd);
       }
     }
   }
 
-  private button(text: string, key: string, action: (event: MouseEvent) => void): HTMLButtonElement {
+  private button(text: string, key: string, action?: (event: MouseEvent) => void): HTMLButtonElement {
     const button = element("button", text);
     button.type = "button";
     button.dataset.focus = key;
-    button.addEventListener("click", action);
+    if (action) button.addEventListener("click", action);
     return button;
   }
 
@@ -137,7 +191,7 @@ export class ProcessView {
       select.append(option);
     }
     select.value = value;
-    select.addEventListener("change", () => change(select.value));
+    select.addEventListener("change", () => { change(select.value); this.persist(); });
     wrapper.append(select);
     return wrapper;
   }
@@ -151,6 +205,7 @@ export class ProcessView {
     search.value = this.query;
     search.dataset.focus = "search";
     search.addEventListener("input", () => { this.query = search.value; this.emphasizeSearch(); });
+    search.addEventListener("change", () => this.persist());
     searchLabel.append(search);
     controls.append(searchLabel, this.dropdown(this.t("activity"), "activity",
       [["", this.t("allActivities")], ...model.nodes.map((id, index): [string, string] => [String(index), id])],
@@ -161,7 +216,7 @@ export class ProcessView {
       this.mode, value => { if (value === "all" || value === "neighbors" || value === "upstream" || value === "downstream") this.mode = value; this.refresh(); }));
     if (model.hasVariant) {
       controls.append(this.dropdown(this.t("variant"), "variant",
-        [["", this.t("allVariants")], ...model.variants.map((id, index): [string, string] => [String(index), id || this.t("blank")])],
+        [["", this.t("allVariants")], ...model.variants.map((id, index): [string, string] => [String(index), id === this.t("blank") ? `"${id}"` : id || this.t("blank")])],
         this.variant === null ? "" : String(model.variants.indexOf(this.variant)),
         value => { this.variant = value === "" ? null : model.variants[Number(value)] ?? null; this.refresh(); }));
       const variantRows = model.edges.filter(edge => this.variant === null || edge.variant === this.variant).flatMap(edge => edge.rows);
@@ -175,9 +230,15 @@ export class ProcessView {
     controls.append(this.button(this.t("clear"), "clear", () => this.actions.clear()));
     controls.append(this.button(this.t("reset"), "reset", () => {
       this.variant = null; this.focus = null; this.mode = "all"; this.query = ""; this.zoom = 1;
-      this.refresh();
+      this.refresh(); this.persist();
     }));
-    this.root.append(controls);
+    const disclosure = element("details", undefined, "controls-panel");
+    disclosure.dataset.detail = "controls";
+    disclosure.open = this.openDetails.has("controls");
+    const summary = element("summary", this.t("explore"));
+    summary.dataset.focus = "explore";
+    disclosure.append(summary, controls);
+    this.root.append(disclosure);
   }
 
   private refresh(): void {
@@ -190,11 +251,14 @@ export class ProcessView {
     this.visible = graphView(model, this.variant, this.focus, this.mode);
     const issues = [...model.issues, ...this.visible.issues];
     this.content.replaceChildren();
-    if (model.hasVariant && this.variant === null) this.content.append(element("p", this.t("aggregate"), "note"));
+    if (model.hasVariant && this.variant === null) this.content.append(element("p", this.t("aggregate"), "aggregate-note"));
     if (issues.length) {
       const diagnostics = element("details", undefined, "diagnostics");
-      diagnostics.open = true;
-      diagnostics.append(element("summary", `${this.t("diagnostics")} (${issues.length})`));
+      diagnostics.dataset.detail = "diagnostics";
+      diagnostics.open = this.openDetails.has("diagnostics");
+      const summary = element("summary", `${this.t("diagnostics")} (${issues.length})`);
+      summary.dataset.focus = "diagnostics";
+      diagnostics.append(summary);
       const list = element("ul");
       for (const issue of issues) {
         const item = element("li", `${this.t(issue.code)} [${issue.count}]`);
@@ -204,13 +268,27 @@ export class ProcessView {
       diagnostics.append(list);
       this.content.append(diagnostics);
     }
-    this.content.append(element("p", `${this.t("shown")}: ${this.visible.edges.length}. ${this.t("noCases")}.`, "summary"));
+    const available = this.visible.edges.filter(edge => edge.duration !== null).length;
+    this.content.append(element("p", `${this.t("shown")}: ${this.visible.edges.length}${model.hasDuration ? ` | ${this.t("durationAvailable")}: ${available}/${this.visible.edges.length}` : ""}.`, "view-summary"));
     if (!this.visible.edges.length) {
-      this.content.append(element("p", this.t("empty"), "empty"));
+      const guide = element("p", model.issues.some(issue => issue.code === "binding") ? this.t("firstRun") : model.receivedRows === 0 ? this.t("noRows") : this.t("empty"), model.issues.some(issue => issue.code === "binding") ? "first-run" : "empty");
+      guide.tabIndex = -1;
+      this.content.append(guide);
       return;
     }
+    const tabs = element("div", undefined, "panel-tabs");
+    for (const panel of ["graph", "table"] as const) {
+      const button = this.button(this.t(panel === "graph" ? "graphPanel" : "tablePanel"), `panel:${panel}`, () => {
+        this.panel = panel; this.refresh(); this.persist();
+      });
+      button.setAttribute("aria-pressed", String(this.panel === panel));
+      tabs.append(button);
+    }
+    this.content.append(tabs, element("p", this.t("enlarge"), "micro-guidance"));
     const body = element("div", undefined, "lens-body");
-    body.append(this.drawGraph(model, this.visible), this.drawDetails(this.visible));
+    const graph = this.drawGraph(model, this.visible), details = this.drawDetails(this.visible);
+    graph.hidden = this.panel !== "graph"; details.hidden = this.panel !== "table";
+    body.append(graph, details);
     this.content.append(body);
     this.updateSelection(this.selections);
     this.emphasizeSearch();
@@ -218,7 +296,7 @@ export class ProcessView {
 
   private edgeLabel(edge: Edge): string {
     const value = this.overlay === "duration" ? edge.duration : edge.frequency;
-    const formatted = value === null ? this.t("unavailable") : this.actions.format(value, this.overlay);
+    const formatted = value === null ? this.t("shortUnavailable") : this.actions.format(value, this.overlay);
     return this.overlay === "duration" && value !== null ? `${formatted} ${this.model?.metric.unit ?? ""}` : formatted;
   }
 
@@ -237,9 +315,10 @@ export class ProcessView {
     ];
   }
 
-  private bindRepresentation(node: HTMLElement | SVGElement, rows: number[], tooltip: Tooltip[]): void {
+  private bindRepresentation(node: HTMLElement | SVGElement, rows: number[], tooltip: Tooltip[], select = true): void {
     node.dataset.rows = JSON.stringify(rows);
-    node.addEventListener("click", event => {
+    this.rowMappings.set(node, rows);
+    if (select) node.addEventListener("click", event => {
       if (event instanceof MouseEvent) this.actions.select(rows, event.ctrlKey || event.metaKey);
     });
     node.addEventListener("contextmenu", event => {
@@ -255,7 +334,10 @@ export class ProcessView {
       }
     });
     node.addEventListener("pointerenter", event => {
-      if (event instanceof MouseEvent) this.actions.tooltip(rows, tooltip, this.coordinates(event.clientX, event.clientY));
+      if (event instanceof PointerEvent && event.pointerType !== "touch") this.actions.tooltip(rows, tooltip, this.coordinates(event.clientX, event.clientY));
+    });
+    node.addEventListener("pointerdown", event => {
+      if (event instanceof PointerEvent && event.pointerType === "touch") this.actions.tooltip(rows, tooltip, this.coordinates(event.clientX, event.clientY), true);
     });
     node.addEventListener("pointerleave", () => this.actions.hideTooltip());
     node.addEventListener("focus", () => {
@@ -271,77 +353,103 @@ export class ProcessView {
 
   private coordinates(x: number, y: number): number[] {
     const bounds = this.root.getBoundingClientRect();
-    return [x - bounds.left, y - bounds.top];
+    return [Math.max(0, Math.min(bounds.width, x - bounds.left)), Math.max(0, Math.min(bounds.height, y - bounds.top))];
   }
 
   private drawGraph(model: ProcessModel, visible: GraphView): HTMLElement {
     const section = element("section", undefined, "graph-section");
     section.setAttribute("aria-label", this.t("graph"));
     section.append(element("h3", this.t("graph")));
+    if (model.nodes.length > 20 || visible.edges.length > 60) section.append(element("p", this.t(this.viewport.width < 600 ? "denseShort" : "dense"), "dense-note"));
     const zoomLabel = element("label", this.t("zoom"));
     const zoom = element("input");
-    zoom.type = "range"; zoom.min = "0.5"; zoom.max = "12"; zoom.step = "0.1"; zoom.value = String(this.zoom);
+    zoom.type = "range"; zoom.min = "0.5"; zoom.max = String(MAX_ZOOM); zoom.step = "0.1"; zoom.value = String(this.zoom);
     zoom.dataset.focus = "zoom";
     zoomLabel.append(zoom);
-    section.append(zoomLabel);
+    if (this.viewport.width < 600 || this.viewport.height < 450) this.root.querySelector(".controls")?.append(zoomLabel);
+    else section.append(zoomLabel);
     const scroll = element("div", undefined, "graph-scroll");
     scroll.tabIndex = 0;
     scroll.dataset.scroll = "graph";
     scroll.dataset.focus = "graph-scroll";
     scroll.setAttribute("aria-label", this.t("graph"));
-    const layout = layoutGraph(model.nodes, visible.edges);
+    const signature = JSON.stringify([model.nodes, model.edges.map(edge => [edge.source, edge.target])]);
+    if (signature !== this.layoutSignature || !this.cachedLayout) {
+      this.cachedLayout = layoutGraph(model.nodes, graphView(model, null, null, "all").edges, model.edges);
+      this.cachedRoutes = new Map(this.cachedLayout.edges.map(edge => [edge.key, edge]));
+      this.layoutSignature = signature;
+    }
+    const layout = this.cachedLayout;
     const image = svg("svg", { viewBox: `0 0 ${layout.width} ${layout.height}`, "aria-hidden": "true", class: "process-graph" });
-    image.classList.toggle("small-graph", model.nodes.length <= 15);
-    const overviewSize = Math.min(380, Math.max(120, this.root.clientWidth - 28));
+    scroll.append(image);
+    section.append(scroll);
+    this.content.append(section);
+    const availableHeight = Math.max(72, Math.min(520, this.viewport.height - (scroll.getBoundingClientRect().top - this.root.getBoundingClientRect().top) - 36));
+    scroll.style.height = `${availableHeight}px`;
+    const fit = Math.max(model.nodes.length <= 15 ? 0.65 : 0.05, Math.min(1.25, Math.max(32, scroll.clientWidth - 16) / layout.width, Math.max(32, availableHeight - 16) / layout.height));
+    scroll.style.height = `${Math.min(availableHeight, Math.max(72, layout.height * fit + 16))}px`;
     const resize = () => {
-      image.style.width = `${overviewSize * this.zoom}px`;
-      image.style.height = `${overviewSize * this.zoom}px`;
+      image.style.width = `${layout.width * fit * this.zoom}px`;
+      image.style.height = `${layout.height * fit * this.zoom}px`;
     };
     resize();
     zoom.addEventListener("input", () => { this.zoom = Number(zoom.value); resize(); });
+    zoom.addEventListener("change", () => this.persist());
     const available = visible.edges.map(edge => this.overlay === "duration" ? edge.duration : edge.frequency).filter(value => value !== null);
     const maximum = Math.max(0, ...available);
     const scaleMaximum = Math.max(1, maximum);
     // Arrow polygons are per edge: no global SVG IDs to collide across visual instances.
     for (const edge of visible.edges) {
-      const position = layout.edges.find(value => value.key === edge.key);
+      const position = this.cachedRoutes.get(edge.key);
       if (!position) continue;
       const group = svg("g", { class: "edge", "data-key": edge.key });
       const metric = this.overlay === "duration" ? edge.duration : edge.frequency;
-      const path = svg("path", { d: position.path, class: "edge-line", "stroke-width": 1.5 + 7 * (metric ?? 0) / scaleMaximum });
+      const path = svg("path", { d: position.path, class: "edge-line", "stroke-width": 1.5 + 7 * ((metric ?? 0) / scaleMaximum) });
       if (metric === null || metric === 0) path.setAttribute("stroke-dasharray", "5 4");
       const hit = svg("path", { d: position.path, class: "edge-hit", "stroke-width": 16 });
-      group.append(path, hit);
-      if (this.settings?.showLabels) {
-        group.append(svg("text", { x: position.label.x, y: position.label.y, class: "edge-label", "text-anchor": "middle" }, this.edgeLabel(edge)));
+      group.append(path, hit, svg("path", {
+        d: "M 0 0 L -11 -5 L -11 5 Z", class: "edge-arrow",
+        transform: `translate(${position.arrow.x} ${position.arrow.y}) rotate(${position.arrow.angle})`
+      }));
+      if (this.settings?.showLabels && visible.edges.length <= 60) {
+        const letters = Array.from(this.edgeLabel(edge));
+        const label = letters.length > 22 ? letters.slice(0, 19).join("") + "..." : letters.join("");
+        group.append(svg("text", { x: position.label.x, y: position.label.y, class: "edge-label", "text-anchor": "middle" }, label));
       }
       this.bindRepresentation(group, edge.rows, this.edgeTooltip(edge));
       image.append(group);
+    }
+    const labelLengths = [...image.querySelectorAll<SVGTextElement>(".edge-label")].map(label => ({ label, width: label.getComputedTextLength() }));
+    for (const { label, width } of labelLengths) if (width > 220) {
+      label.setAttribute("textLength", "220");
+      label.setAttribute("lengthAdjust", "spacingAndGlyphs");
     }
     const nodeSet = new Set(visible.nodes);
     for (const node of layout.nodes.filter(node => nodeSet.has(node.id))) {
       const group = svg("g", { class: "activity", transform: `translate(${node.x} ${node.y})` });
       group.dataset.activity = node.id;
       group.classList.toggle("focused", node.id === this.focus);
-      group.append(svg("circle", { r: 25 }), svg("text", { y: 4, "text-anchor": "middle", class: "node-number" }, String(model.nodes.indexOf(node.id) + 1)));
-      group.append(svg("text", { y: 43, "text-anchor": "middle", class: "node-label" }, node.id.length > 20 ? `${node.id.slice(0, 18)}...` : node.id));
+      group.append(svg("rect", { x: -NODE_SIZE.width / 2, y: -NODE_SIZE.height / 2, width: NODE_SIZE.width, height: NODE_SIZE.height, rx: 8 }));
+      const letters = Array.from(node.id);
+      const label = svg("text", { "text-anchor": "middle", class: "node-label" });
+      if (letters.length <= 17) label.append(svg("tspan", { x: 0, y: 5 }, node.id));
+      else {
+        label.append(svg("tspan", { x: 0, y: -3 }, letters.slice(0, 17).join("")));
+        label.append(svg("tspan", { x: 0, y: 13 }, letters.slice(17, 31).join("") + (letters.length > 31 ? "..." : "")));
+      }
+      group.append(label);
       const rows = activityRows(visible.edges, node.id);
-      this.bindRepresentation(group, rows, [{ displayName: this.t("activity"), value: node.id }, { displayName: this.t("incident"), value: String(rows.length) }]);
+      group.addEventListener("click", () => {
+        this.focus = this.focus === node.id ? null : node.id; this.mode = this.focus ? "neighbors" : "all";
+        this.refresh(); this.persist();
+      });
+      this.bindRepresentation(group, rows, [{ displayName: this.t("activity"), value: node.id }, { displayName: this.t("incident"), value: String(rows.length) }], false);
       image.append(group);
     }
-    scroll.append(image);
-    section.append(scroll, element("p", `${this.t("legend")} ${this.t("overlay")}: ${this.t(this.overlay === "duration" ? "duration" : "frequency")}; max ${available.length ? this.actions.format(maximum, this.overlay) : this.t("unavailable")}${this.overlay === "duration" ? ` ${model.metric.unit}` : ""}.`, "legend"));
-    // SVG path length is computed once, synchronously, before renderingFinished.
-    this.content.append(section);
-    for (const path of image.querySelectorAll<SVGPathElement>(".edge-line")) {
-      const length = path.getTotalLength();
-      const end = path.getPointAtLength(length);
-      const prior = path.getPointAtLength(Math.max(0, length - 8));
-      const angle = Math.atan2(end.y - prior.y, end.x - prior.x) * 180 / Math.PI;
-      path.parentElement?.append(svg("path", {
-        d: "M 0 0 L -11 -5 L -11 5 Z", class: "edge-arrow",
-        transform: `translate(${end.x} ${end.y}) rotate(${angle})`
-      }));
+    section.append(element("p", `${this.t(this.overlay === "duration" ? "duration" : "frequency")}; max ${available.length ? this.actions.format(maximum, this.overlay) : this.t("unavailable")}${this.overlay === "duration" ? ` ${model.metric.unit} (${model.metric.statistic})` : ""}. ${this.t("legend")}`, "legend"));
+    if (this.overlay === "duration" && available.length) {
+      const ranked = visible.edges.filter(edge => edge.duration === maximum);
+      section.append(element("p", `${this.t("ranked")}: ${ranked.slice(0, 3).map(edge => `${edge.source} -> ${edge.target}`).join("; ")}${ranked.length > 3 ? ` (+${ranked.length - 3})` : ""}. ${this.t("rankedNote")}`, "ranked-note"));
     }
     return section;
   }
@@ -363,10 +471,10 @@ export class ProcessView {
       item.dataset.activity = activity;
       item.append(element("strong", activity));
       item.append(this.button(this.t("focus"), `focus:${activity}`, () => {
-        this.focus = activity; this.mode = "neighbors"; this.refresh();
+        this.focus = activity; this.mode = "neighbors"; this.refresh(); this.persist();
         this.root.querySelector<HTMLSelectElement>('[data-focus="activity"]')?.focus();
       }));
-      const button = this.button(this.t("select"), `node:${activity}`, () => { /* Selection is bound with native tooltip/context handling. */ });
+      const button = this.button(this.t("select"), `node:${activity}`);
       const rows = activityRows(visible.edges, activity);
       this.bindRepresentation(button, rows, [{ displayName: this.t("activity"), value: activity }, { displayName: this.t("incident"), value: String(rows.length) }]);
       item.append(button);
@@ -399,7 +507,7 @@ export class ProcessView {
           ? this.t(edge.durationReason ?? (this.model?.hasDuration ? "unavailable" : "unbound"))
           : `${this.actions.format(edge.duration, "duration")} ${this.model?.metric.unit ?? ""} (${this.model?.metric.statistic ?? ""})`));
       const actions = element("td");
-      const select = this.button(`${this.t("select")} (${edge.rows.length})`, `edge:${edge.key}`, () => {});
+      const select = this.button(`${this.t("select")} (${edge.rows.length})`, `edge:${edge.key}`);
       this.bindRepresentation(select, edge.rows, this.edgeTooltip(edge));
       actions.append(select);
       const detail = element("details");
@@ -414,7 +522,7 @@ export class ProcessView {
         for (const index of edge.rows) {
           const item = element("li");
           const label = `${this.t("row")} ${index + 1}`;
-          const button = this.button(label, `row:${index}`, () => {});
+          const button = this.button(label, `row:${index}`);
           this.bindRepresentation(button, [index], this.actions.extraTooltips([index]));
           item.append(button);
           item.append(this.button(this.t("menu"), `menu:${index}`, event => {
@@ -451,18 +559,18 @@ export class ProcessView {
   updateSelection(rows: Set<number>): void {
     this.selections = rows;
     for (const node of this.root.querySelectorAll<HTMLElement | SVGElement>("[data-rows]")) {
-      const indices: number[] = JSON.parse(node.dataset.rows ?? "[]");
+      const indices = this.rowMappings.get(node) ?? [];
       const selected = indices.some(index => rows.has(index));
       node.classList.toggle("selected", selected);
       node.classList.toggle("muted", rows.size > 0 && !selected);
       if (node instanceof HTMLButtonElement) node.setAttribute("aria-pressed", selected ? "true" : "false");
     }
   }
-  showError(message: string): void { this.message.textContent = message; }
+  showError(message: string): void { this.interactionError = message; this.message.textContent = message; }
   renderFailure(message: string): void {
     this.actions.hideTooltip();
     this.root.replaceChildren(element("p", `${this.t("error")}: ${message}`, "fatal"));
     this.root.firstElementChild?.setAttribute("role", "alert");
   }
-  destroy(): void { this.root.replaceChildren(); this.model = undefined; }
+  destroy(): void { this.root.replaceChildren(); this.model = undefined; this.cachedLayout = undefined; this.cachedRoutes.clear(); }
 }

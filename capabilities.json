@@ -42,6 +42,10 @@
         "showLabels": { "displayName": "Show edge metrics", "type": { "bool": true } }
       }
     },
+    "navigation": {
+      "displayName": "Local view state",
+      "properties": { "state": { "displayName": "Bookmark state", "type": { "text": true } } }
+    },
     "metrics": {
       "displayName": "Duration provenance",
       "properties": {

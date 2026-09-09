@@ -1,0 +1,362 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "VariantCycleProcessMap",
+  "position": {
+    "x": 24,
+    "y": 128,
+    "z": 1,
+    "width": 808,
+    "height": 568,
+    "tabOrder": 1
+  },
+  "visual": {
+    "visualType": "AtlynProcessLensA61D72B54E9F4B65A137E92DF84610C3",
+    "query": {
+      "queryState": {
+        "source": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Prepared Transitions"
+                    }
+                  },
+                  "Property": "source"
+                }
+              },
+              "queryRef": "Prepared Transitions.source",
+              "nativeQueryRef": "source",
+              "displayName": "Source"
+            }
+          ]
+        },
+        "target": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Prepared Transitions"
+                    }
+                  },
+                  "Property": "target"
+                }
+              },
+              "queryRef": "Prepared Transitions.target",
+              "nativeQueryRef": "target",
+              "displayName": "Target"
+            }
+          ]
+        },
+        "frequency": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Prepared Transitions"
+                    }
+                  },
+                  "Property": "Prepared Frequency"
+                }
+              },
+              "queryRef": "Prepared Transitions.Prepared Frequency",
+              "nativeQueryRef": "Prepared Frequency",
+              "displayName": "Frequency"
+            }
+          ]
+        },
+        "duration": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Prepared Transitions"
+                    }
+                  },
+                  "Property": "Prepared Duration"
+                }
+              },
+              "queryRef": "Prepared Transitions.Prepared Duration",
+              "nativeQueryRef": "Prepared Duration",
+              "displayName": "Mean (h)"
+            }
+          ]
+        },
+        "variant": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Prepared Transitions"
+                    }
+                  },
+                  "Property": "variant"
+                }
+              },
+              "queryRef": "Prepared Transitions.variant",
+              "nativeQueryRef": "variant",
+              "displayName": "Variant"
+            }
+          ]
+        },
+        "rowKey": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Prepared Transitions"
+                    }
+                  },
+                  "Property": "rowKey"
+                }
+              },
+              "queryRef": "Prepared Transitions.rowKey",
+              "nativeQueryRef": "rowKey",
+              "displayName": "Row ID"
+            }
+          ]
+        },
+        "tooltip": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Prepared Transitions"
+                    }
+                  },
+                  "Property": "statistic"
+                }
+              },
+              "queryRef": "Prepared Transitions.statistic",
+              "nativeQueryRef": "statistic",
+              "displayName": "Statistic"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Prepared Transitions"
+                    }
+                  },
+                  "Property": "unit"
+                }
+              },
+              "queryRef": "Prepared Transitions.unit",
+              "nativeQueryRef": "unit",
+              "displayName": "Unit"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Prepared Transitions"
+                    }
+                  },
+                  "Property": "provenance"
+                }
+              },
+              "queryRef": "Prepared Transitions.provenance",
+              "nativeQueryRef": "provenance",
+              "displayName": "Provenance"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Prepared Transitions"
+                  }
+                },
+                "Property": "rowKey"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": false
+      }
+    },
+    "objects": {
+      "metrics": [
+        {
+          "properties": {
+            "statistic": {
+              "expr": {
+                "Literal": {
+                  "Value": "'mean'"
+                }
+              }
+            },
+            "unit": {
+              "expr": {
+                "Literal": {
+                  "Value": "'hours'"
+                }
+              }
+            },
+            "provenance": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Synthetic support tickets; arithmetic mean of adjacent-event elapsed UTC hours within each supplied variant; includes zero-hour ties.'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "appearance": [
+        {
+          "properties": {
+            "edgeColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#27698C'"
+                    }
+                  }
+                }
+              }
+            },
+            "nodeColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#27698C'"
+                    }
+                  }
+                }
+              }
+            },
+            "showLabels": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "navigation": [
+        {
+          "properties": {
+            "state": {
+              "expr": {
+                "Literal": {
+                  "Value": "'{\"query\":\"\",\"focus\":null,\"variant\":null,\"mode\":\"all\",\"overlay\":\"duration\",\"zoom\":1,\"panel\":\"graph\"}'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Prepared workflow · mean elapsed hours'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#172B4D'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Synthetic prepared transition graph. Includes cycles and self-loops. See the adjacent native table and methodology page.'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

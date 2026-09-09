@@ -1,8 +1,46 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/1.0.0/schema.json",
   "name": "SampleOverview",
-  "displayName": "Prepared transition rows",
+  "displayName": "01 · Workflow overview",
   "displayOption": "FitToPage",
   "height": 720,
-  "width": 1280
+  "width": 1280,
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#F4F7FB'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualInteractions": [
+    {
+      "source": "SampleOverviewProcessMap",
+      "target": "PreparedTransitionTable",
+      "type": "DataFilter"
+    },
+    {
+      "source": "PreparedTransitionTable",
+      "target": "SampleOverviewProcessMap",
+      "type": "NoFilter"
+    }
+  ]
 }

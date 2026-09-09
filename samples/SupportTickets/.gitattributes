@@ -1,0 +1,4 @@
+# Preserve extracted package bytes so archive/resource SHA-256 values survive checkout.
+SupportTickets.Report/CustomVisuals/** -text
+ReleasePackage/*.pbiviz -text
+package-manifest.json text eol=lf

@@ -69,7 +69,8 @@ table 'Prepared Transitions'
 		mode: import
 		source =
 				let
-					Source = Csv.Document(File.Contents(CsvPath), [Delimiter=",", Columns=9, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					SourceBytes = if Text.Trim(CsvPath) = "" then Binary.FromText(PreparedCsvBase64, BinaryEncoding.Base64) else File.Contents(CsvPath),
+					Source = Csv.Document(SourceBytes, [Delimiter=",", Columns=9, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
 					Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
 					Typed = Table.TransformColumnTypes(Headers, {
 						{"source", type text}, {"target", type text}, {"frequency", Int64.Type},
