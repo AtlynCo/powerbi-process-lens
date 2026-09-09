@@ -3,11 +3,27 @@ import { createHash } from "node:crypto";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { resolve, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { guid, version, pageIds, roleFields, resourcePackage } from "./author-report.mjs";
+import { guid, version, pageIds, roleFields, resourcePackage, reportDefinitionVersion } from "./author-report.mjs";
 import { parseCsv, prepare, serialize, provenance } from "./prepare-transitions.mjs";
 
 const flags = process.argv.slice(2);
-assert(flags.every(flag => ["--allow-unsynced", "--schemas"].includes(flag)), "Usage: node samples\\check-report-source.mjs [--allow-unsynced] [--schemas]");
+assert(flags.every(flag => ["--allow-unsynced", "--schemas", "--self-test"].includes(flag)), "Usage: node samples\\check-report-source.mjs [--allow-unsynced] [--schemas] [--self-test]");
+function checkDefinitionPreflight(modelText, versionMetadata) {
+  const references = modelText.replaceAll("\r\n", "\n").match(/^[\t ]*ref .+$/gmu) ?? [];
+  assert.deepEqual(references, [
+    "ref table 'Prepared Transitions'", "ref expression CsvPath", "ref expression PreparedCsvBase64"
+  ], "References must be top-level TMDL declarations for the prepared table and expressions.");
+  assert.deepEqual(versionMetadata, reportDefinitionVersion, "Required PBIR definition/version.json must declare the authored report version.");
+}
+if (flags.includes("--self-test")) {
+  const valid = "model Model\n\tculture: en-US\n\nref table 'Prepared Transitions'\nref expression CsvPath\nref expression PreparedCsvBase64\n";
+  checkDefinitionPreflight(valid, reportDefinitionVersion);
+  assert.throws(() => checkDefinitionPreflight(valid.replace("\nref table", "\n\tref table"), reportDefinitionVersion), /References must be top-level/u);
+  assert.throws(() => checkDefinitionPreflight(valid.replace("\nref expression", "\n\tref expression"), reportDefinitionVersion), /References must be top-level/u);
+  assert.throws(() => checkDefinitionPreflight(valid, undefined), /Required PBIR/u);
+  assert.throws(() => checkDefinitionPreflight(valid, { ...reportDefinitionVersion, version: "0.0.0" }), /Required PBIR/u);
+  console.log("Definition preflight self-tests passed: indented table/expression references and missing/wrong PBIR version metadata are rejected.");
+}
 const root = fileURLToPath(new URL("./SupportTickets/", import.meta.url));
 const read = path => readFileSync(path, "utf8");
 const documents = [];
@@ -26,6 +42,9 @@ const binding = json(join(report, "definition.pbir"));
 assert(!binding.datasetReference.byConnection, "The sample must remain local/offline.");
 const model = resolve(report, binding.datasetReference.byPath.path);
 assert(existsSync(join(model, "definition.pbism")), "Missing referenced semantic model.");
+const versionPath = join(report, "definition", "version.json");
+assert(existsSync(versionPath), "Required PBIR definition/version.json is missing.");
+checkDefinitionPreflight(read(join(model, "definition", "model.tmdl")), json(versionPath));
 const tableText = read(join(model, "definition", "tables", "Prepared Transitions.tmdl"));
 const columns = [...tableText.matchAll(/^\tcolumn (\w+)$/gmu)].map(match => match[1]);
 assert.deepEqual(columns, ["source", "target", "frequency", "duration", "variant", "rowKey", "statistic", "unit", "provenance"]);

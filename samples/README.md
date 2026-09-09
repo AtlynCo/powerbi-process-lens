@@ -33,6 +33,23 @@ node .\samples\check-report-source.mjs --allow-unsynced
 node .\samples\sync-report-package.mjs --self-test
 ```
 
+### Native-preflight compatibility correction
+
+The provisional sample correction adds required `SupportTickets.Report\definition\version.json` (PBIR version `2.0.0`) and moves the table/expression `ref` declarations in `model.tmdl` to the root level. The original indented references reproduced an official TOM `InvalidLineType / ReferenceObject` error at model line 10; validating only the JSON files that happened to exist did not detect either risk.
+
+`author-report.mjs` now emits the version file. `check-report-source.mjs --self-test` rejects indented table/expression references and missing/wrong version metadata before the existing binding/hash checks. These narrow guards are not a general TMDL parser.
+
+Use the installed official Microsoft TOM assembly for a separate read-only parser preflight, in a fresh PowerShell process:
+
+```powershell
+pwsh -NoProfile -File .\samples\check-tmdl.ps1 -TomAssemblyPath "C:\path\to\official\Microsoft.AnalysisServices.Tabular.dll"
+node .\samples\check-report-source.mjs --self-test --schemas
+```
+
+Supply an existing trusted assembly path, keeping its sibling dependencies together. The script does not install/restore/build anything, connect to a server, execute M/DAX, refresh data or operate Desktop UI. It deserializes the definition and requires one table, nine columns, two measures, one partition and two expressions. The correction passed Microsoft TOM `19.117.0.0` on PowerShell `7.6.6` / .NET `10.0.12`; this is **not native rendering acceptance**.
+
+The separately supplied retry folder is **provisional sample-only evidence** and retains the exact unlicensed `1.0.0.0` visual package. It does not replace the sealed `eeae7c0` bundle, move its certification ref, lift the paid-subscription hold or qualify as a final paid/submission build. Native retry, genuine PBIX creation and the agreed paid-licensing contract remain coordinator-owned.
+
 Preparation, report authoring and unsynchronized source checking use only Node built-ins. Package synchronization and synchronized-source archive checks use the repository's existing `jszip` dependency. No core sample command requires an external service or uploads report data. Optional `check-report-source.mjs --schemas` uses the existing `ajv` dependency and fetches only public Microsoft schemas into memory.
 
 `npm run sample` writes the two prepared artifacts in this directory. Preparation `--check` is read-only and fails on stale output (normalizing checkout CRLF to LF); `--self-test` additionally checks all 12 expected counts/durations, deterministic ordering, CSV parsing, and invalid inputs. Authoring writes deterministic JSON/TMDL, including a base64 copy of the exact normalized prepared CSV; it does **not** import a visual package. Run it with Desktop closed. Its `--check` checks authored defaults, so deliberate later Desktop edits may correctly cause a mismatch.

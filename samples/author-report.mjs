@@ -19,6 +19,7 @@ export const resourcePackage = {
 };
 const schema = (item, revision = "1.0.0") =>
   `https://developer.microsoft.com/json-schemas/fabric/item/report/definition/${item}/${revision}/schema.json`;
+export const reportDefinitionVersion = { $schema: schema("versionMetadata"), version: "2.0.0" };
 const literal = value => ({ expr: { Literal: { Value: typeof value === "string" ? `'${value.replaceAll("'", "''")}'` : String(value) } } });
 const color = value => ({ solid: { color: literal(value) } });
 const field = property => ({ [property.startsWith("Prepared ") ? "Measure" : "Column"]: {
@@ -133,6 +134,7 @@ export function authoredFiles() {
 expression PreparedCsvBase64 = "${Buffer.from(csv).toString("base64")}"
 \tlineageTag: 5afad788-523a-41cb-aeec-ff55b480c98b
 `);
+  add("definition\\version.json", reportDefinitionVersion);
   add("definition\\report.json", {
     $schema: schema("report", "3.0.0"),
     themeCollection: { customTheme: {
