@@ -1,0 +1,48 @@
+{
+  "synthetic": true,
+  "events": 30,
+  "cases": 6,
+  "variants": 3,
+  "activities": 5,
+  "preparedRows": 12,
+  "adjacentTransitions": 24,
+  "elapsedAdjacentEventHours": 41,
+  "statistic": "mean",
+  "unit": "hours",
+  "provenance": "Synthetic support tickets; arithmetic mean of adjacent-event elapsed UTC hours within each supplied variant; includes zero-hour ties.",
+  "variantPaths": [
+    {
+      "id": "V01",
+      "label": "Straight-through",
+      "path": [
+        "Opened",
+        "Triage",
+        "Resolved",
+        "Closed"
+      ]
+    },
+    {
+      "id": "V02",
+      "label": "Waiting and return",
+      "path": [
+        "Opened",
+        "Triage",
+        "Waiting",
+        "Triage",
+        "Resolved",
+        "Closed"
+      ]
+    },
+    {
+      "id": "V03",
+      "label": "Repeated triage",
+      "path": [
+        "Opened",
+        "Triage",
+        "Triage",
+        "Resolved",
+        "Closed"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "PreparedTransitionTable",
+  "position": {
+    "x": 24,
+    "y": 24,
+    "z": 0,
+    "height": 672,
+    "width": 1232,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": { "Column": { "Expression": { "SourceRef": { "Entity": "Prepared Transitions" } }, "Property": "rowKey" } },
+              "queryRef": "Prepared Transitions.rowKey",
+              "nativeQueryRef": "rowKey"
+            },
+            {
+              "field": { "Column": { "Expression": { "SourceRef": { "Entity": "Prepared Transitions" } }, "Property": "source" } },
+              "queryRef": "Prepared Transitions.source",
+              "nativeQueryRef": "source"
+            },
+            {
+              "field": { "Column": { "Expression": { "SourceRef": { "Entity": "Prepared Transitions" } }, "Property": "target" } },
+              "queryRef": "Prepared Transitions.target",
+              "nativeQueryRef": "target"
+            },
+            {
+              "field": { "Column": { "Expression": { "SourceRef": { "Entity": "Prepared Transitions" } }, "Property": "variant" } },
+              "queryRef": "Prepared Transitions.variant",
+              "nativeQueryRef": "variant"
+            },
+            {
+              "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "Prepared Transitions" } }, "Property": "Prepared Frequency" } },
+              "queryRef": "Prepared Transitions.Prepared Frequency",
+              "nativeQueryRef": "Prepared Frequency"
+            },
+            {
+              "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "Prepared Transitions" } }, "Property": "Prepared Duration" } },
+              "queryRef": "Prepared Transitions.Prepared Duration",
+              "nativeQueryRef": "Prepared Duration"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

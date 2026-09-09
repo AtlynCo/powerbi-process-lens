@@ -1,0 +1,2 @@
+expression CsvPath = "C:\CHANGE_ME\powerbi-process-lens\samples\prepared-transitions.csv" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: d5d31160-7e61-442a-a18d-247eb974c11b

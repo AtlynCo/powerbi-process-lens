@@ -1,0 +1,13 @@
+source,target,frequency,duration,variant,rowKey,statistic,unit,provenance
+Opened,Triage,2,1.5,V01,transition-001,mean,hours,Synthetic support tickets; arithmetic mean of adjacent-event elapsed UTC hours within each supplied variant; includes zero-hour ties.
+Resolved,Closed,2,1.5,V01,transition-002,mean,hours,Synthetic support tickets; arithmetic mean of adjacent-event elapsed UTC hours within each supplied variant; includes zero-hour ties.
+Triage,Resolved,2,3.5,V01,transition-003,mean,hours,Synthetic support tickets; arithmetic mean of adjacent-event elapsed UTC hours within each supplied variant; includes zero-hour ties.
+Opened,Triage,2,0.75,V02,transition-004,mean,hours,Synthetic support tickets; arithmetic mean of adjacent-event elapsed UTC hours within each supplied variant; includes zero-hour ties.
+Resolved,Closed,2,1,V02,transition-005,mean,hours,Synthetic support tickets; arithmetic mean of adjacent-event elapsed UTC hours within each supplied variant; includes zero-hour ties.
+Triage,Resolved,2,3.5,V02,transition-006,mean,hours,Synthetic support tickets; arithmetic mean of adjacent-event elapsed UTC hours within each supplied variant; includes zero-hour ties.
+Triage,Waiting,2,1.75,V02,transition-007,mean,hours,Synthetic support tickets; arithmetic mean of adjacent-event elapsed UTC hours within each supplied variant; includes zero-hour ties.
+Waiting,Triage,2,2.5,V02,transition-008,mean,hours,Synthetic support tickets; arithmetic mean of adjacent-event elapsed UTC hours within each supplied variant; includes zero-hour ties.
+Opened,Triage,2,1,V03,transition-009,mean,hours,Synthetic support tickets; arithmetic mean of adjacent-event elapsed UTC hours within each supplied variant; includes zero-hour ties.
+Resolved,Closed,2,1,V03,transition-010,mean,hours,Synthetic support tickets; arithmetic mean of adjacent-event elapsed UTC hours within each supplied variant; includes zero-hour ties.
+Triage,Resolved,2,2.25,V03,transition-011,mean,hours,Synthetic support tickets; arithmetic mean of adjacent-event elapsed UTC hours within each supplied variant; includes zero-hour ties.
+Triage,Triage,2,0.25,V03,transition-012,mean,hours,Synthetic support tickets; arithmetic mean of adjacent-event elapsed UTC hours within each supplied variant; includes zero-hour ties.

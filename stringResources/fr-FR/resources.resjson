@@ -1,0 +1,9 @@
+{
+  "roleSource": "Identifiant de l'activite source",
+  "roleTarget": "Identifiant de l'activite cible",
+  "roleFrequency": "Frequence de transition",
+  "roleDuration": "Statistique de duree preparee",
+  "roleVariant": "Variante",
+  "roleRowKey": "Identifiant de ligne preparee (grain facultatif)",
+  "roleTooltip": "Infobulles"
+}
