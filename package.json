@@ -1,0 +1,37 @@
+{
+  "name": "atlyn-process-lens",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Offline prepared-transition process-map analysis for Power BI",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src tests",
+    "test": "vitest run",
+    "package": "node scripts/package.mjs",
+    "audit:certification": "node scripts/package.mjs --certification-audit",
+    "test:browser": "node scripts/browser.mjs test",
+    "browser:install": "node scripts/browser.mjs install chromium",
+    "audit:package": "node scripts/audit-package.mjs",
+    "audit:dependencies": "npm audit",
+    "sample": "node samples/prepare-transitions.mjs",
+    "notices": "node scripts/dependency-notices.mjs"
+  },
+  "dependencies": {
+    "powerbi-visuals-utils-formattingutils": "7.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.58.2",
+    "@types/node": "24.10.1",
+    "eslint": "9.39.1",
+    "powerbi-visuals-api": "5.11.1",
+    "powerbi-visuals-tools": "7.2.1",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.57.0",
+    "vitest": "4.1.11",
+    "jszip": "3.10.1"
+  },
+  "overrides": {
+    "qs": "6.16.0",
+    "sockjs": { "uuid": "11.1.1" }
+  }
+}

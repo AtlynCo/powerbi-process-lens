@@ -1,0 +1,17 @@
+[
+  {
+    "id": "V01",
+    "label": "Straight-through",
+    "path": ["Opened", "Triage", "Resolved", "Closed"]
+  },
+  {
+    "id": "V02",
+    "label": "Waiting and return",
+    "path": ["Opened", "Triage", "Waiting", "Triage", "Resolved", "Closed"]
+  },
+  {
+    "id": "V03",
+    "label": "Repeated triage",
+    "path": ["Opened", "Triage", "Triage", "Resolved", "Closed"]
+  }
+]

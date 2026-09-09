@@ -1,0 +1,9 @@
+{
+  "roleSource": "Source Activity ID",
+  "roleTarget": "Target Activity ID",
+  "roleFrequency": "Transition Frequency",
+  "roleDuration": "Prepared Duration Statistic",
+  "roleVariant": "Variant",
+  "roleRowKey": "Prepared Row ID (optional grain)",
+  "roleTooltip": "Tooltips"
+}

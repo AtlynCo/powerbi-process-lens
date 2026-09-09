@@ -1,0 +1,80 @@
+table 'Prepared Transitions'
+	lineageTag: 39a88e1f-c4db-46b9-95e0-1a6e9775a75c
+
+	measure 'Prepared Frequency' = SUM('Prepared Transitions'[frequency])
+		formatString: 0
+		lineageTag: 5e860626-8269-4b74-8324-bd9a2b285f97
+
+	measure 'Prepared Duration' = IF(COUNTROWS('Prepared Transitions') = 1, SELECTEDVALUE('Prepared Transitions'[duration]), BLANK())
+		formatString: 0.00
+		lineageTag: 8e8a81ac-f4fd-4339-8d54-e7cfc8c31178
+
+	column source
+		dataType: string
+		lineageTag: 810c8a48-a886-452a-873e-ac72c61e2d11
+		summarizeBy: none
+		sourceColumn: source
+
+	column target
+		dataType: string
+		lineageTag: d7f93462-149b-488b-9c2a-59278aee5e56
+		summarizeBy: none
+		sourceColumn: target
+
+	column frequency
+		dataType: int64
+		formatString: 0
+		lineageTag: 43e09c2e-7043-416c-8f2f-1d4d39a9a765
+		summarizeBy: none
+		sourceColumn: frequency
+
+	column duration
+		dataType: double
+		formatString: 0.00
+		lineageTag: 872c2369-269b-44fa-b686-b7616e4429c0
+		summarizeBy: none
+		sourceColumn: duration
+
+	column variant
+		dataType: string
+		lineageTag: 1d3708b0-23a8-433c-886d-d997877f39d5
+		summarizeBy: none
+		sourceColumn: variant
+
+	column rowKey
+		dataType: string
+		lineageTag: 42c8fcd1-4928-4a36-a2be-a1bde718bb7d
+		summarizeBy: none
+		sourceColumn: rowKey
+
+	column statistic
+		dataType: string
+		lineageTag: 5b76731b-4ebd-49d1-946f-93ad6e689a07
+		summarizeBy: none
+		sourceColumn: statistic
+
+	column unit
+		dataType: string
+		lineageTag: 866e936a-ab6f-4d50-b797-eb050761cb36
+		summarizeBy: none
+		sourceColumn: unit
+
+	column provenance
+		dataType: string
+		lineageTag: 41f19c82-5e69-4d2e-af17-aa2b1ac43261
+		summarizeBy: none
+		sourceColumn: provenance
+
+	partition 'Prepared Transitions' = m
+		mode: import
+		source =
+				let
+					Source = Csv.Document(File.Contents(CsvPath), [Delimiter=",", Columns=9, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					Typed = Table.TransformColumnTypes(Headers, {
+						{"source", type text}, {"target", type text}, {"frequency", Int64.Type},
+						{"duration", type number}, {"variant", type text}, {"rowKey", type text},
+						{"statistic", type text}, {"unit", type text}, {"provenance", type text}
+					}, "en-US")
+				in
+					Typed
