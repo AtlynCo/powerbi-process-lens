@@ -4,6 +4,16 @@
 
 Public Microsoft requirements were reviewed September 9, 2026. Recheck the linked policies and actual offer UI before submission.
 
+## Approved acquisition and runtime
+
+On September 10, 2026 the owner approved **existing Atlyn storefront subscriptions with ungated visuals and free shared viewing**. The renderer is intended as-is; it does not enforce paid-author/subscription entitlements. Do not add license keys, signing infrastructure, AAD/API checks, feature gates, WebAccess or external runtime license calls. Runtime licensing integration is no longer a blocker.
+
+The owner-required **Power BI additional-purchase badge** must disclose external acquisition in the listing. It is not a certification badge or a runtime authorization mechanism. Microsoft's [offer setup documentation](https://learn.microsoft.com/en-us/partner-center/marketplace-offers/power-bi-visual-offer-setup) distinguishes independently managed purchases from Microsoft-managed licensing and a no-purchase offer. The coordinator configures the applicable external-purchase setting and final badge/copy; no live setting is changed here.
+
+The first-party source inventory contains no `LICENSE`/`LICENCE` file or `package.json` license declaration. Dependency notices do not license the whole Atlyn product. Preserve existing terms; this approval does not invent relicensing or override Power BI host licensing.
+
+Frozen bundles retain their historical evidence/status. No repackage or version bump is needed for this documentation-only clarification. Native/PBIX completion and final assets remain coordinator-owned; hold main, certification-ref advancement, merge and submission until the final gate.
+
 ## Source and build
 
 - One independent visual in this private repository. Frozen GUID and version are recorded in `pbiviz.json`.
@@ -26,7 +36,8 @@ Public Microsoft requirements were reviewed September 9, 2026. Recheck the linke
 | Performance | Raw samples and p50/p95/max, machine/browser/hash and contention caveats | Actual host developer-tools profile, query/IPC/paint behavior |
 | Media | Original icon20/logo300; 1-5 actual package PNG captures at 1366x768, each <=1024 KB | Owner approval; native-host captures if required by reviewer |
 | Sample | Fully authored offline bound PBIP plus exact generated runtime | Desktop open/refresh and real offline `.pbix` conversion required |
-| Legal/commercial | Authored functional listing draft and accurate limitations | Privacy policy, EULA/contract and URL, pricing/licensing, support readiness and publisher permissions |
+| Acquisition/runtime | Approved external Atlyn subscriptions, ungated renderer and free shared viewing; no runtime integration required | Required additional-purchase badge, approved storefront link and accurate existing subscription copy |
+| Legal/commercial | Recorded first-party license-file absence; dependency notices preserved | Privacy policy, applicable EULA/terms and URL, support readiness and publisher permissions; no invented relicensing |
 
 `supportsHighlight:false` is intentional: Microsoft documents that table mappings cannot carry categorical highlights. Incoming report filtering and local selected-state emphasis must not be marketed as incoming cross-highlight support.
 

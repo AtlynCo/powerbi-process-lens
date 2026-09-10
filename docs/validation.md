@@ -2,6 +2,12 @@
 
 Automated checks and native-host acceptance are different evidence. A unit/browser harness cannot establish Power BI Desktop import, tenant behavior, export compatibility, assistive-technology usability, or Microsoft certification.
 
+## Approved runtime baseline
+
+The September 10, 2026 owner decision is **existing Atlyn storefront subscriptions, ungated runtime and free shared viewing**. No paid-author enforcement or runtime entitlement integration is pending. Do not add license keys, signer/AAD/API infrastructure, feature gates or external license calls to satisfy a nonexistent runtime gate. External acquisition requires the owner-specified additional-purchase Power BI listing badge, not runtime gating.
+
+This documentation-only clarification does not rebuild, bump versions or rewrite frozen package/evidence artifacts. Native acceptance, genuine PBIX conversion and final assets remain with the coordinator; hold main/certification advancement, merge and submission until that final gate. Existing first-party terms and dependency notices remain unchanged.
+
 ## Release-quality local evidence
 
 No GitHub Actions or other hosted CI/CD is used. `npm run validate:release` runs the existing local toolchain and writes command outputs/status/durations, source-input hashes, actual package/payload hashes, screenshot hashes and performance observations to ignored `dist/quality-evidence`. It stops on any failing gate. Set `PROCESS_LENS_BROWSER_CHANNEL=msedge` to use installed Edge in the isolated harness.

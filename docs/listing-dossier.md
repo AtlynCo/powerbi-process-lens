@@ -4,6 +4,8 @@
 
 This dossier collects proposed listing copy, assets, evaluator steps and unresolved owner decisions for version **1.0.0.0**. It does not create an offer, sign into Partner Center, submit to Microsoft, publish a repository or change prices/licensing. Do not replace blocked fields with plausible-sounding invented details.
 
+**Approved September 10, 2026:** acquisition through existing Atlyn storefront subscriptions, with **ungated visuals and free shared viewing**. The renderer is intended as-is; runtime licensing integration is not a blocker. Do not add paid-author enforcement, license keys, a new signer, AAD/API checks, feature gates, WebAccess or runtime license calls. The owner explicitly requires the **Power BI additional-purchase badge** in the listing. Main/certification advancement, merge and submission remain held for the coordinator's final native/PBIX/assets gate. Frozen bundles are not rewritten; no runtime rebuild or version bump is needed for this clarification.
+
 ## 1. Identity and current metadata
 
 | Field | Current value / review status |
@@ -41,7 +43,9 @@ The visual consumes a prepared transition table: source activity, target activit
 
 Frequency values can add across contributing rows. Duration statistics are shown only when the displayed edge has a single eligible prepared contributor; they become unavailable when duplicate or cross-variant contributors would require aggregation. The visual does not invent a combined mean, median or percentile. Use one prepared row per edge and variant and preserve row identity.
 
-The visual performs its graph analysis locally within the Power BI visual runtime and does not require an external process-analysis service. Normal Power BI data access, tenant policy, report sharing and licensing remain separate.
+Acquisition is through existing Atlyn storefront subscriptions. The visual runtime is ungated, including free shared viewing: it does not verify paid-author seats, license keys or subscription ownership, and has no activation or feature locks. Power BI licensing, permissions and tenant policies still apply.
+
+Graph processing is local to the visual and does not require an external process-analysis service or runtime entitlement call.
 
 An included synthetic support-ticket sample demonstrates a waiting cycle, a repeated-activity self-loop, explicit duration provenance and a native reference table. The sample event-preparation script runs offline. It is an example for the supplied schema, not a general event-log mining product.
 
@@ -53,7 +57,7 @@ Atlyn Process Lens does not infer cases, discover full process variants, calcula
 2. workflow
 3. transitions
 
-Current visual-offer limits reviewed September 9, 2026: up to three keywords, summary at most 100 characters and description at most 3,000 characters. The draft summary has 95 characters and description 2,040. The owner chooses up to two categories from the current offer UI; no industry claim is selected.
+Current visual-offer limits reviewed September 9, 2026: up to three keywords, summary at most 100 characters and description at most 3,000 characters. Recheck the edited copy against these limits before submission. The owner chooses up to two categories from the current offer UI; no industry claim is selected.
 
 ### Proposed audience and use cases
 
@@ -75,6 +79,8 @@ Current visual-offer limits reviewed September 9, 2026: up to three keywords, su
 | Data completeness | Host row windows, reduction/segmentation, invalid rows and render limits can affect visible data. Readers must inspect diagnostics; a visible subset is not proof of full-log coverage. |
 | Local vs report scope | Local search/focus/variant controls explore the visual. Explicit host-selection actions are separate and depend on report interaction configuration. |
 | Offline processing | Visual graph processing and the included preparation script do not require an external analysis service. This is not a promise that the entire Power BI host, tenant or model has no network activity. |
+| Acquisition and viewing | Existing Atlyn storefront subscriptions handle acquisition; the renderer is ungated with free shared viewing, not paid-author enforcement. Host licensing/permissions still apply. |
+| Required purchase badge | Include the owner-required Power BI additional-purchase badge and accurate external acquisition copy. This is a listing requirement, not a certification badge, runtime lock or Microsoft-managed entitlement integration. |
 | Deployment | Tenant/organization policy may restrict private custom visuals. Desktop, Service, export, mobile and accessibility acceptance must be recorded separately; browser harness checks are not substitutes. |
 | Security and privacy | Do not claim a legal privacy policy or complete compliance certification from an empty visual privilege list alone. Owner-approved terms and privacy notice are still required. |
 | Publication status | Not represented as Microsoft-certified, AppSource-approved, submitted, generally available or commercially licensed by this dossier. |
@@ -92,6 +98,8 @@ Current visual-offer limits reviewed September 9, 2026: up to three keywords, su
 | Third-party notices | Generated notices from the repository's release tooling | Include reviewed final notices with distributed runtime |
 
 The icon/logo are original geometric artwork, not screenshots or Microsoft certification badges. See [asset provenance](../assets/README.md).
+
+The **additional-purchase Power BI badge is explicitly required**. The coordinator owns the final offer configuration, storefront link and assets. Microsoft's [offer setup documentation](https://learn.microsoft.com/en-us/partner-center/marketplace-offers/power-bi-visual-offer-setup), reviewed September 10, 2026, lists **My offer requires purchase of a service or offers additional in-app purchase** for independently managed transactions, separately from Microsoft-managed licensing and no-purchase offers. Configure the appropriate external-purchase disclosure at the final gate; do not invent a custom Microsoft badge image or add runtime checks. No live offer setting was changed here.
 
 ### Draft screenshot captions and capture plan
 
@@ -159,7 +167,9 @@ A useful report should include product/package version, host and version, reprod
 - Decide whether any public issue tracker or downloads will exist. The private GitHub repository is not currently a customer-accessible alternative.
 - Approve any uptime/response-time commitments separately. This draft supplies **no mailbox SLA**.
 
-## 7. Explicit owner decision register
+## 7. First-party license record and owner decisions
+
+At inspected main commit `d03b38ba89ac2729471e06306dc6789643178f63`, no first-party `LICENSE`/`LICENCE` file or `package.json` license declaration exists. `THIRD-PARTY-NOTICES.txt` explicitly applies to named dependencies, not to the Atlyn product as a whole. Those notices and all existing source terms are preserved; this update creates no new license, grant, signer or enforcement scheme. Free shared viewing describes the approved distribution/runtime behavior, not a new source-code license or waiver of Power BI requirements.
 
 | Decision / artifact | Status | What the owner must provide |
 | --- | --- | --- |
@@ -168,16 +178,17 @@ A useful report should include product/package version, host and version, reprod
 | Certification source branch | **FINAL HANDOFF RECORD** | The release handoff records the exact lowercase **`certification`** branch commit matching the sealed source/package. Generated `CustomVisuals` runtime and duplicate packages are excluded from source and included in the sealed offline report. Reviewer access and submission authority remain owner gates. |
 | Public privacy notice URL | **BLOCKED** | Owner-approved applicable privacy policy, public URL and review of visual/support data practices |
 | End-user terms / license agreement URL | **BLOCKED** | Approved terms, grants/restrictions, jurisdiction and public availability; not inferred from repository privacy |
-| Price / commercial model | **BLOCKED** | Free vs paid, plans, markets/currencies, trials/refunds and related commercial terms where applicable |
-| License enforcement / entitlement | **BLOCKED** | Explicit owner decision on whether licensing is needed and how it is implemented/disclosed; no backend or entitlement system is supplied by this draft |
-| Microsoft/Power BI licensing wording | **OWNER REVIEW** | Accurate distinction between host licenses and any eventual visual-specific license |
+| Acquisition / commercial model | **APPROVED — EXISTING STOREFRONT SUBSCRIPTIONS** | Use existing Atlyn acquisition/subscription terms and approved links. Numeric prices, plans and other existing storefront details must be accurately supplied, not invented here. |
+| Runtime entitlement behavior | **APPROVED — UNGATED** | Free shared viewing; no paid-author/subscription checks, activation, keys, signer, AAD/API, feature gates, WebAccess or runtime license calls. No runtime integration blocker remains. |
+| Additional-purchase Power BI badge | **REQUIRED — FINAL LISTING GATE** | Coordinator configures the external-purchase disclosure/badge, acquisition link and final approved assets; not a certification badge. |
+| Microsoft/Power BI licensing wording | **HOST REQUIREMENTS REMAIN** | Free shared viewing adds no Atlyn runtime gate; it does not waive Power BI licensing, report permissions or tenant policies. |
 | Support readiness | **BLOCKED** | Verified mailbox/URL ownership, content, staffing and approved service commitments, if any |
 | Accessibility and host compatibility claims | **BLOCKED pending native evidence** | Actual tested hosts/versions, limitations and accessible-use results |
 | Screenshots and sample binary | **LOCAL MEDIA / NATIVE BINARY BLOCKED** | Three final-package PNG captures are hashed in sealed evidence. Native-accepted PBIP, mandatory Desktop-created sample PBIX and owner media approval remain outstanding. |
 | Certification / listing submission | **NOT PERFORMED** | Current requirement review, full evidence, human authorization and Microsoft's eventual result |
 | Release package approval | **OWNER APPROVAL PENDING** | Sealed manifest binds one package to report resources, browser evidence and notices; owner approves the eventual submitted artifact |
 
-No sale price, free-use promise, commercial license grant, legal contact/address, certification status or Microsoft endorsement is implied by any blank or draft field.
+The approved storefront/ungated-viewing pattern above is explicit. No unspecified sale price, source-code license grant, legal contact/address, certification status or Microsoft endorsement is invented by any blank or draft field.
 
 ## 8. Release review checklist
 
@@ -191,7 +202,8 @@ No sale price, free-use promise, commercial license grant, legal contact/address
 - [ ] Mandatory native sample PBIX created by Desktop and separately reopened/verified.
 - [ ] Genuine screenshots: 1–5 PNG files, exactly 1366×768 each, each ≤1024 KB, with truthful host labels.
 - [ ] Public support, legal terms and privacy URLs verified by the owner.
-- [ ] Pricing/licensing and entitlement decisions approved.
+- [x] Owner approved existing storefront subscriptions, ungated visuals and free shared viewing; no runtime licensing integration is pending.
+- [ ] Final listing includes the required additional-purchase Power BI badge and accurate approved storefront links/terms, without paid-author enforcement claims.
 - [ ] Final third-party notices and dependency/license review complete.
 - [ ] Current Microsoft publication/certification requirements reviewed separately; no unsupported claims added.
 - [ ] Release owner provides the required source branch named exactly lowercase `certification`; no branch publication is performed by this dossier.
