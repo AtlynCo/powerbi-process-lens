@@ -19,7 +19,9 @@ These are not missing or placeholder contact details. Approval of sourced metada
 
 - [x] Owner approved existing Atlyn storefront subscriptions with **ungated runtime and free shared viewing** on September 10, 2026. This is not paid-author enforcement.
 - [x] Runtime licensing integration is not required: no keys, new signer, AAD/API, feature gates, external runtime licensing calls or WebAccess to add.
-- [ ] Include the explicitly required **Power BI additional-purchase badge**, accurate storefront acquisition copy and approved link in the final listing. This is not a certification badge; the coordinator owns the live offer setting and assets.
+- [ ] Pursue the required official **Power BI certified** badge: coordinator selects Partner Center's **Request Power BI certification** checkbox at the final gate and provides additional source/function review materials. Request/review pending; Microsoft awards it only after approval.
+
+The required badge is not a purchase/IAP badge or a graphic to add to the visual. Do not await badge artwork or claim certification before Microsoft's decision. Accurate storefront links/copy and normal listing assets remain separate owner responsibilities.
 
 No first-party `LICENSE`/`LICENCE` file or `package.json` license declaration is present in the inspected source baseline. Preserve the named third-party licenses; do not infer an Atlyn-wide license from them or invent relicensing. Free shared viewing does not waive Power BI licensing/permissions.
 

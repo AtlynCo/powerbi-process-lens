@@ -4,7 +4,7 @@
 
 This dossier collects proposed listing copy, assets, evaluator steps and unresolved owner decisions for version **1.0.0.0**. It does not create an offer, sign into Partner Center, submit to Microsoft, publish a repository or change prices/licensing. Do not replace blocked fields with plausible-sounding invented details.
 
-**Approved September 10, 2026:** acquisition through existing Atlyn storefront subscriptions, with **ungated visuals and free shared viewing**. The renderer is intended as-is; runtime licensing integration is not a blocker. Do not add paid-author enforcement, license keys, a new signer, AAD/API checks, feature gates, WebAccess or runtime license calls. The owner explicitly requires the **Power BI additional-purchase badge** in the listing. Main/certification advancement, merge and submission remain held for the coordinator's final native/PBIX/assets gate. Frozen bundles are not rewritten; no runtime rebuild or version bump is needed for this clarification.
+**Approved September 10, 2026:** acquisition through existing Atlyn storefront subscriptions, with **ungated visuals and free shared viewing**. The renderer is intended as-is; runtime licensing integration is not a blocker. Do not add paid-author enforcement, license keys, a new signer, AAD/API checks, feature gates, WebAccess or runtime license calls. The owner requires Microsoft's official **Power BI certified** badge as the target; **request/review are pending**, and only Microsoft can award it. Main/certification advancement, merge and submission remain held for the coordinator's final native/PBIX/assets gate. Frozen bundles are not rewritten; no runtime rebuild or version bump is needed for this clarification.
 
 ## 1. Identity and current metadata
 
@@ -80,7 +80,7 @@ Current visual-offer limits reviewed September 9, 2026: up to three keywords, su
 | Local vs report scope | Local search/focus/variant controls explore the visual. Explicit host-selection actions are separate and depend on report interaction configuration. |
 | Offline processing | Visual graph processing and the included preparation script do not require an external analysis service. This is not a promise that the entire Power BI host, tenant or model has no network activity. |
 | Acquisition and viewing | Existing Atlyn storefront subscriptions handle acquisition; the renderer is ungated with free shared viewing, not paid-author enforcement. Host licensing/permissions still apply. |
-| Required purchase badge | Include the owner-required Power BI additional-purchase badge and accurate external acquisition copy. This is a listing requirement, not a certification badge, runtime lock or Microsoft-managed entitlement integration. |
+| Required certification target | Microsoft's official **Power BI certified** badge; request through Partner Center's **Request Power BI certification** checkbox at the final gate. Request/review pending, not awarded or claimed. No badge graphic is added to the visual. |
 | Deployment | Tenant/organization policy may restrict private custom visuals. Desktop, Service, export, mobile and accessibility acceptance must be recorded separately; browser harness checks are not substitutes. |
 | Security and privacy | Do not claim a legal privacy policy or complete compliance certification from an empty visual privilege list alone. Owner-approved terms and privacy notice are still required. |
 | Publication status | Not represented as Microsoft-certified, AppSource-approved, submitted, generally available or commercially licensed by this dossier. |
@@ -99,7 +99,7 @@ Current visual-offer limits reviewed September 9, 2026: up to three keywords, su
 
 The icon/logo are original geometric artwork, not screenshots or Microsoft certification badges. See [asset provenance](../assets/README.md).
 
-The **additional-purchase Power BI badge is explicitly required**. The coordinator owns the final offer configuration, storefront link and assets. Microsoft's [offer setup documentation](https://learn.microsoft.com/en-us/partner-center/marketplace-offers/power-bi-visual-offer-setup), reviewed September 10, 2026, lists **My offer requires purchase of a service or offers additional in-app purchase** for independently managed transactions, separately from Microsoft-managed licensing and no-purchase offers. Configure the appropriate external-purchase disclosure at the final gate; do not invent a custom Microsoft badge image or add runtime checks. No live offer setting was changed here.
+The required badge is Microsoft's official **Power BI certified** badge, **not a purchase/IAP badge or artwork to supply**. Under the [publishing and certification instructions](https://learn.microsoft.com/en-us/power-bi/developer/visuals/office-store#certify-your-visual), the coordinator selects **Request Power BI certification** in Partner Center and submits the additional source/function review materials at the final gate. Microsoft awards the badge only after approval. Request and review remain pending; do not add a badge graphic to the visual, await badge artwork, or claim certification in customer-facing copy. Final screenshots, icon/logo approval and other normal listing assets remain separate.
 
 ### Draft screenshot captions and capture plan
 
@@ -180,7 +180,7 @@ At inspected main commit `d03b38ba89ac2729471e06306dc6789643178f63`, no first-pa
 | End-user terms / license agreement URL | **BLOCKED** | Approved terms, grants/restrictions, jurisdiction and public availability; not inferred from repository privacy |
 | Acquisition / commercial model | **APPROVED — EXISTING STOREFRONT SUBSCRIPTIONS** | Use existing Atlyn acquisition/subscription terms and approved links. Numeric prices, plans and other existing storefront details must be accurately supplied, not invented here. |
 | Runtime entitlement behavior | **APPROVED — UNGATED** | Free shared viewing; no paid-author/subscription checks, activation, keys, signer, AAD/API, feature gates, WebAccess or runtime license calls. No runtime integration blocker remains. |
-| Additional-purchase Power BI badge | **REQUIRED — FINAL LISTING GATE** | Coordinator configures the external-purchase disclosure/badge, acquisition link and final approved assets; not a certification badge. |
+| Official Power BI certified badge | **REQUIRED TARGET — REQUEST/REVIEW PENDING** | Coordinator selects **Request Power BI certification** at the final gate and provides source/function review evidence. Microsoft awards after approval; no badge artwork or runtime change. |
 | Microsoft/Power BI licensing wording | **HOST REQUIREMENTS REMAIN** | Free shared viewing adds no Atlyn runtime gate; it does not waive Power BI licensing, report permissions or tenant policies. |
 | Support readiness | **BLOCKED** | Verified mailbox/URL ownership, content, staffing and approved service commitments, if any |
 | Accessibility and host compatibility claims | **BLOCKED pending native evidence** | Actual tested hosts/versions, limitations and accessible-use results |
@@ -203,7 +203,8 @@ The approved storefront/ungated-viewing pattern above is explicit. No unspecifie
 - [ ] Genuine screenshots: 1–5 PNG files, exactly 1366×768 each, each ≤1024 KB, with truthful host labels.
 - [ ] Public support, legal terms and privacy URLs verified by the owner.
 - [x] Owner approved existing storefront subscriptions, ungated visuals and free shared viewing; no runtime licensing integration is pending.
-- [ ] Final listing includes the required additional-purchase Power BI badge and accurate approved storefront links/terms, without paid-author enforcement claims.
+- [ ] Coordinator requests the official **Power BI certified** badge through **Request Power BI certification** at the final gate; record Microsoft's review/decision before making any certified claim. Do not add badge artwork to the visual.
+- [ ] Final listing accurately describes approved storefront links/terms and ungated shared viewing, without paid-author enforcement claims.
 - [ ] Final third-party notices and dependency/license review complete.
 - [ ] Current Microsoft publication/certification requirements reviewed separately; no unsupported claims added.
 - [ ] Release owner provides the required source branch named exactly lowercase `certification`; no branch publication is performed by this dossier.

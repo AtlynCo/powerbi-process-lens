@@ -4,7 +4,9 @@ Automated checks and native-host acceptance are different evidence. A unit/brows
 
 ## Approved runtime baseline
 
-The September 10, 2026 owner decision is **existing Atlyn storefront subscriptions, ungated runtime and free shared viewing**. No paid-author enforcement or runtime entitlement integration is pending. Do not add license keys, signer/AAD/API infrastructure, feature gates or external license calls to satisfy a nonexistent runtime gate. External acquisition requires the owner-specified additional-purchase Power BI listing badge, not runtime gating.
+The September 10, 2026 owner decision is **existing Atlyn storefront subscriptions, ungated runtime and free shared viewing**. No paid-author enforcement or runtime entitlement integration is pending. Do not add license keys, signer/AAD/API infrastructure, feature gates or external license calls to satisfy a nonexistent runtime gate.
+
+The required badge target is Microsoft's official **Power BI certified**, requested through Partner Center's **Request Power BI certification** checkbox at the coordinator's final gate. Request/review are pending; Microsoft awards the badge after additional source/function review. It is not a purchase/IAP badge, not artwork to supply and not a visual-runtime modification. Local evidence does not award certification.
 
 This documentation-only clarification does not rebuild, bump versions or rewrite frozen package/evidence artifacts. Native acceptance, genuine PBIX conversion and final assets remain with the coordinator; hold main/certification advancement, merge and submission until that final gate. Existing first-party terms and dependency notices remain unchanged.
 

@@ -8,7 +8,7 @@ Public Microsoft requirements were reviewed September 9, 2026. Recheck the linke
 
 On September 10, 2026 the owner approved **existing Atlyn storefront subscriptions with ungated visuals and free shared viewing**. The renderer is intended as-is; it does not enforce paid-author/subscription entitlements. Do not add license keys, signing infrastructure, AAD/API checks, feature gates, WebAccess or external runtime license calls. Runtime licensing integration is no longer a blocker.
 
-The owner-required **Power BI additional-purchase badge** must disclose external acquisition in the listing. It is not a certification badge or a runtime authorization mechanism. Microsoft's [offer setup documentation](https://learn.microsoft.com/en-us/partner-center/marketplace-offers/power-bi-visual-offer-setup) distinguishes independently managed purchases from Microsoft-managed licensing and a no-purchase offer. The coordinator configures the applicable external-purchase setting and final badge/copy; no live setting is changed here.
+The owner-required target is Microsoft's official **Power BI certified** badge. **Request and review are pending**; no certification is claimed. At the final submission gate, the coordinator selects Partner Center's **Request Power BI certification** checkbox and provides the additional source/function review materials. Microsoft awards the badge after approval. This is not a purchase/IAP badge, runtime gate or graphic to add to the visual, and it does not require badge artwork from the owner. No request or live setting was changed here.
 
 The first-party source inventory contains no `LICENSE`/`LICENCE` file or `package.json` license declaration. Dependency notices do not license the whole Atlyn product. Preserve existing terms; this approval does not invent relicensing or override Power BI host licensing.
 
@@ -36,7 +36,8 @@ Frozen bundles retain their historical evidence/status. No repackage or version 
 | Performance | Raw samples and p50/p95/max, machine/browser/hash and contention caveats | Actual host developer-tools profile, query/IPC/paint behavior |
 | Media | Original icon20/logo300; 1-5 actual package PNG captures at 1366x768, each <=1024 KB | Owner approval; native-host captures if required by reviewer |
 | Sample | Fully authored offline bound PBIP plus exact generated runtime | Desktop open/refresh and real offline `.pbix` conversion required |
-| Acquisition/runtime | Approved external Atlyn subscriptions, ungated renderer and free shared viewing; no runtime integration required | Required additional-purchase badge, approved storefront link and accurate existing subscription copy |
+| Acquisition/runtime | Approved external Atlyn subscriptions, ungated renderer and free shared viewing; no runtime integration required | Approved storefront link and accurate existing subscription copy |
+| Official certification badge | Required target: Microsoft **Power BI certified**; source/function review preparation | Coordinator selects **Request Power BI certification** at final gate; request/review pending; Microsoft alone awards the badge |
 | Legal/commercial | Recorded first-party license-file absence; dependency notices preserved | Privacy policy, applicable EULA/terms and URL, support readiness and publisher permissions; no invented relicensing |
 
 `supportsHighlight:false` is intentional: Microsoft documents that table mappings cannot carry categorical highlights. Incoming report filtering and local selected-state emphasis must not be marketed as incoming cross-highlight support.
