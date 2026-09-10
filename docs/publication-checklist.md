@@ -15,11 +15,23 @@ The coordinator approved the following existing metadata and verified the public
 
 These are not missing or placeholder contact details. Approval of sourced metadata does not establish mailbox monitoring, response times, ongoing support responsiveness, or release readiness. The private [issue tracker](https://github.com/AtlynCo/powerbi-process-lens/issues) remains collaborator-only, not the public support channel.
 
+## Approved distribution pattern
+
+- [x] Owner approved existing Atlyn storefront subscriptions with **ungated runtime and free shared viewing** on September 10, 2026. This is not paid-author enforcement.
+- [x] Runtime licensing integration is not required: no keys, new signer, AAD/API, feature gates, external runtime licensing calls or WebAccess to add.
+- [ ] Pursue the required official **Power BI certified** badge: coordinator selects Partner Center's **Request Power BI certification** checkbox at the final gate and provides additional source/function review materials. Request/review pending; Microsoft awards it only after approval.
+
+The required badge is not a purchase/IAP badge or a graphic to add to the visual. Do not await badge artwork or claim certification before Microsoft's decision. Accurate storefront links/copy and normal listing assets remain separate owner responsibilities.
+
+No first-party `LICENSE`/`LICENCE` file or `package.json` license declaration is present in the inspected source baseline. Preserve the named third-party licenses; do not infer an Atlyn-wide license from them or invent relicensing. Free shared viewing does not waive Power BI licensing/permissions.
+
+Preserve all frozen evidence. No repackage or version bump is needed while runtime is unchanged. Main/certification advancement, merge and submission remain on hold for the coordinator's final gate; native validation, genuine PBIX conversion and final assets are still coordinator-owned.
+
 ## Owner-controlled release gates and remaining blockers
 
 - [ ] Recheck the existing public support page's availability and accuracy for this release, and verify the support process and responsiveness manually. Do not promise mailbox monitoring or response times without a separately established commitment.
 - [ ] Owner-approved public privacy statement reflecting actual runtime behavior, Power BI host responsibilities, report data sources, and distribution context.
-- [ ] Owner-approved distribution/license/legal terms and any required notices. This repository's documentation does not grant usage rights, promise an entitlement, or establish a legal position.
+- [ ] Confirm applicable existing storefront/EULA/privacy terms and required notices for publication. The acquisition/runtime pattern is approved; this remaining legal-copy review is not a runtime licensing-integration blocker or a new license grant.
 - [ ] Confirm the final package/listing uses the approved publisher/contact/support/source metadata above; verify publisher account/branding and public URL accuracy for release. Keep the private source-repository URL distinct from public support. Any required legal URLs still need owner approval.
 - [ ] Actual marketplace/store requirements reviewed against the intended submission route and current rules. No certification badge, certified-visual claim, or certification eligibility promise without an actual decision from Microsoft.
 - [ ] Approve the three actual final-package browser captures and original icon20/logo300; capture native-host media after import if required by the reviewer. Browser-harness images are labeled as such, never as Desktop/Service acceptance. No generated mock screenshots or renamed ZIP-as-PBIX artifacts.
@@ -53,3 +65,5 @@ These are not missing or placeholder contact details. Approval of sourced metada
 Use “prepared process-map analysis” or “visualization of supplied process transitions.” Explain that event preparation occurs offline, duration statistics are supplied, duplicate durations are unavailable, and displayed totals can represent only a received subset.
 
 Avoid “process mining,” “automatically discovers bottlenecks/root causes,” “reconstructs journeys,” “certified,” “guaranteed export,” “compliant,” “free for commercial use,” or business/legal/service promises not separately established and approved by the owner. Selection-based cross-filtering is not incoming highlight-measure support.
+
+Use the approved distinction: **storefront subscription acquisition; ungated visual runtime and free shared viewing**. Do not advertise paid-author enforcement, seat checks or feature locks that the renderer does not implement.
