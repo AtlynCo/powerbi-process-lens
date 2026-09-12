@@ -17,7 +17,8 @@
     "sample": "node samples/prepare-transitions.mjs",
     "notices": "node scripts/dependency-notices.mjs",
     "validate:release": "node scripts/validate-release.mjs",
-    "seal:release": "node scripts/seal-release.mjs"
+    "seal:release": "node scripts/seal-release.mjs",
+    "postinstall": "node scripts/patch-loader.mjs"
   },
   "dependencies": {
     "powerbi-visuals-utils-formattingutils": "7.0.0"
