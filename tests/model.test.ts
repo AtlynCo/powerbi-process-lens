@@ -129,6 +129,22 @@ describe("Power BI binding, formatting and locales", () => {
     expect(readDataView(undefined, DEFAULTS).issues).toContainEqual({ code: "binding", count: 1 });
     expect(readDataView({ metadata: { columns: [] }, table: { columns: [], rows: [] } }, DEFAULTS).edges).toEqual([]);
   });
+  it("diagnoses partially mapped or missing fields", () => {
+    const col = (role: string): powerbi.DataViewMetadataColumn => ({ displayName: role, roles: { [role]: true } });
+    for (const columns of [
+      [col("source")],
+      [col("target")],
+      [col("frequency")],
+      [col("source"), col("target")],
+      [col("source"), col("frequency")],
+      [col("target"), col("frequency")],
+      [col("source"), col("target"), col("frequency"), col("source")]
+    ]) {
+      const result = readDataView({ metadata: { columns }, table: { columns, rows: [] } }, DEFAULTS);
+      expect(result.issues).toContainEqual({ code: "binding", count: 1 });
+      expect(result.edges).toEqual([]);
+    }
+  });
   it("reads table fields by roles rather than column order", () => {
     const columns: powerbi.DataViewMetadataColumn[] = [
       { displayName: "f", roles: { frequency: true } },
