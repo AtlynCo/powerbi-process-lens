@@ -2,7 +2,7 @@
 
 **Human-review draft. Not a submitted offer, certification result, approval, commercial contract or release authorization.**
 
-This dossier collects proposed listing copy, assets, evaluator steps and unresolved owner decisions for version **1.0.0.0**. It does not create an offer, sign into Partner Center, submit to Microsoft, publish a repository or change prices/licensing. Do not replace blocked fields with plausible-sounding invented details.
+This dossier collects proposed listing copy, assets, evaluator steps and unresolved owner decisions. Initially drafted for version **1.0.0.0**, it now references the **1.0.3.0 offline candidate**, which is not native-accepted. It does not create an offer, sign into Partner Center, submit to Microsoft, publish a repository or change prices/licensing. Do not replace blocked fields with plausible-sounding invented details.
 
 **Approved September 10, 2026:** acquisition through existing Atlyn storefront subscriptions, with **ungated visuals and free shared viewing**. The renderer is intended as-is; runtime licensing integration is not a blocker. Do not add paid-author enforcement, license keys, a new signer, AAD/API checks, feature gates, WebAccess or runtime license calls. The owner requires Microsoft's official **Power BI certified** badge as the target; **request/review are pending**, and only Microsoft can award it. Main/certification advancement, merge and submission remain held for the coordinator's final native/PBIX/assets gate. Frozen bundles are not rewritten; no runtime rebuild or version bump is needed for this clarification.
 
@@ -13,7 +13,7 @@ This dossier collects proposed listing copy, assets, evaluator steps and unresol
 | Product name | **Atlyn Process Lens** |
 | Publisher/author label in package | **Atlyn**; legal publishing entity and brand authority require owner confirmation |
 | Visual GUID | `AtlynProcessLensA61D72B54E9F4B65A137E92DF84610C3` — frozen |
-| Package version | `1.0.2.0` |
+| Package version | `1.0.3.0` candidate; prior `1.0.2.0` PBIX is diagnostic only |
 | Current support email | `atlyn.help@gmail.com` — owner must confirm mailbox control and readiness |
 | Current support URL | `https://atlynco.github.io/atlyn-powerbi-support/docs/faq/` — verified public support FAQ |
 | Source repository metadata | `https://github.com/AtlynCo/powerbi-process-lens` — **private**; not a public customer support or download link |
@@ -129,7 +129,7 @@ node .\scripts\generate-icons.mjs --check
 node .\samples\prepare-transitions.mjs --check --self-test
 node .\samples\author-report.mjs --check
 node .\samples\sync-report-package.mjs --self-test
-$package = ".\dist\AtlynProcessLensA61D72B54E9F4B65A137E92DF84610C3.1.0.0.0.pbiviz"
+$package = ".\dist\AtlynProcessLensA61D72B54E9F4B65A137E92DF84610C3.1.0.3.0.pbiviz"
 node .\samples\sync-report-package.mjs --package $package
 node .\samples\sync-report-package.mjs --package $package --check
 node .\samples\check-report-source.mjs

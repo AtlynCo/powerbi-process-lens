@@ -6,7 +6,7 @@ A Power BI custom visual for **analysis of prepared process maps**. It displays 
 | --- | --- |
 | Display name | Atlyn Process Lens |
 | Frozen visual GUID | `AtlynProcessLensA61D72B54E9F4B65A137E92DF84610C3` |
-| Visual version | `1.0.0.0` |
+| Visual version | `1.0.3.0` candidate; native acceptance pending |
 
 ## What it shows
 
@@ -19,6 +19,8 @@ A Power BI custom visual for **analysis of prepared process maps**. It displays 
 Activity names are shown on the map. Clicking an activity changes **local focus**, never report selection. Use **Explore and select** for search, traversal, supplied variants, overlay and zoom; use **Activities and transitions** for keyboard-operable full labels and explicit native selections. Reciprocal metrics have separate labels. Dense maps retain their received topology but need zoom, focus or the table for readable detail. Tiny tiles offer **Expand** (a host focus-mode request) instead of a clipped, unreadable graph.
 
 Local navigation is serialized in the hidden `navigation.state` property for host persistence/bookmarks. Native bookmark and focus-mode interoperability remains an explicit acceptance gate, not a browser-harness claim.
+
+A transient host update without the duration role displays frequency without erasing a saved duration-overlay preference. When the duration role returns, the requested overlay is restored.
 
 The accepted interaction contract supports host cross-filtering and local highlighting of selected rows and their represented items. The table data mapping **does not carry categorical incoming highlight measures** (`supportsHighlight: false`); do not describe this as incoming cross-highlight support.
 
@@ -58,7 +60,7 @@ The repository includes:
 
 The example has 30 events, six synthetic tickets, three supplied variants, five activities, and 24 adjacent transitions prepared into 12 rows. It includes `Triage → Waiting → Triage` and `Triage → Triage`. Elapsed adjacent-event time totals 41 hours. Ticket counts come from the offline fixture, not graph inference.
 
-The PBIP is source-authored and has **not been opened or refreshed in native Power BI Desktop**. The package synchronization command populates its generated custom-visual resources from the exact `.pbiviz`; the sealed release contains that fully populated report. Follow [the sample guide](samples/README.md) for preparation, bound fields and expected values. Source/schema checks do not substitute for actual Desktop import, rendering, offline refresh or conversion to the required `.pbix`.
+The `1.0.3.0` PBIP is source-authored and awaits native Power BI Desktop acceptance. A prior `1.0.2.0` diagnostic PBIX passed data and package-parity checks, but first visits to its V02/V03 pages after a cold reopen showed the frequency overlay instead of their saved duration overlay. That PBIX is **not accepted for submission**. The package synchronization command populates the candidate's generated custom-visual resources from the exact `.pbiviz`. Follow [the sample guide](samples/README.md) for preparation, bound fields and expected values. Source/schema and packaged-browser checks do not substitute for Desktop refresh, first-visit rendering or conversion to a newly accepted `.pbix`.
 
 ## Development
 
@@ -123,7 +125,7 @@ The owner explicitly requires Microsoft's official **Power BI certified** badge 
 
 **Current first-party license record:** at main commit `d03b38ba89ac2729471e06306dc6789643178f63`, there is no first-party `LICENSE`/`LICENCE` file and no `package.json` license declaration. `THIRD-PARTY-NOTICES.txt` applies only to its named dependencies, not the Atlyn product as a whole. This update does not add or change a license grant. Free shared viewing describes the approved runtime/distribution behavior, not a new source-code license or a waiver of Power BI requirements.
 
-The project is **not represented as Microsoft-certified or publication-ready**. Privacy/legal materials, existing subscription terms and listing accuracy, native-host validation, genuine PBIX conversion and final store-media approval remain owner gates. The coordinator alone manages Desktop/shared Service UI and live Marketplace submission. Main/certification advancement, merge and submission remain on hold until the coordinator's final gate. Frozen evidence is preserved; this documentation-only approval needs no runtime rebuild or version bump. No certification, service level, competitive superiority or business outcome is promised here.
+The project is **not represented as Microsoft-certified or publication-ready**. Privacy/legal materials, existing subscription terms and listing accuracy, native-host validation, genuine PBIX conversion and final store-media approval remain owner gates. Desktop access requires an explicit exclusive transfer; the coordinator alone manages live Marketplace submission. Main/certification advancement, merge and submission remain on hold until the coordinator's final gate. Frozen evidence is preserved: the earlier distribution approval needed no runtime change, while the separate `1.0.3.0` overlay repair requires new package and native validation. No certification, service level, competitive superiority or business outcome is promised here.
 
 Approved publisher/contact metadata: **Atlyn**, <atlyn.help@gmail.com>. Public support: <https://atlynco.github.io/atlyn-powerbi-support/docs/faq/>; the coordinator verified its support content. Listing this contact does not promise mailbox monitoring or response times.
 
