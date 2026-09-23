@@ -13,9 +13,9 @@ This dossier collects proposed listing copy, assets, evaluator steps and unresol
 | Product name | **Atlyn Process Lens** |
 | Publisher/author label in package | **Atlyn**; legal publishing entity and brand authority require owner confirmation |
 | Visual GUID | `AtlynProcessLensA61D72B54E9F4B65A137E92DF84610C3` — frozen |
-| Package version | `1.0.0.0` — frozen for this release |
+| Package version | `1.0.2.0` |
 | Current support email | `atlyn.help@gmail.com` — owner must confirm mailbox control and readiness |
-| Current support URL | `https://www.atlynco.com/docs/faq` — owner must verify public access, relevant content and ongoing maintenance |
+| Current support URL | `https://atlynco.github.io/atlyn-powerbi-support/docs/faq/` — verified public support FAQ |
 | Source repository metadata | `https://github.com/AtlynCo/powerbi-process-lens` — **private**; not a public customer support or download link |
 | Proposed listing language | English; report narrative is English |
 | Packaged localization | English/French resource files are included in current project metadata; final-package/native-host checks still apply |
@@ -176,10 +176,10 @@ At inspected main commit `d03b38ba89ac2729471e06306dc6789643178f63`, no first-pa
 | Legal publisher and brand authority | **BLOCKED** | Legal entity, marketplace account ownership, required verified details and approval to use Atlyn branding |
 | Submission authority / Partner Center access | **BLOCKED** | Authorized human owner and approved account; no live account activity performed here |
 | Certification source branch | **FINAL HANDOFF RECORD** | The release handoff records the exact lowercase **`certification`** branch commit matching the sealed source/package. Generated `CustomVisuals` runtime and duplicate packages are excluded from source and included in the sealed offline report. Reviewer access and submission authority remain owner gates. |
-| Public privacy notice URL | **BLOCKED** | Owner-approved applicable privacy policy, public URL and review of visual/support data practices |
-| End-user terms / license agreement URL | **BLOCKED** | Approved terms, grants/restrictions, jurisdiction and public availability; not inferred from repository privacy |
-| Acquisition / commercial model | **APPROVED — EXISTING STOREFRONT SUBSCRIPTIONS** | Use existing Atlyn acquisition/subscription terms and approved links. Numeric prices, plans and other existing storefront details must be accurately supplied, not invented here. |
-| Runtime entitlement behavior | **APPROVED — UNGATED** | Free shared viewing; no paid-author/subscription checks, activation, keys, signer, AAD/API, feature gates, WebAccess or runtime license calls. No runtime integration blocker remains. |
+| Public privacy notice URL | **VERIFIED** | `https://atlynco.github.io/atlyn-powerbi-support/legal/privacy/` — independently verified anonymous HTTPS 200 |
+| End-user terms / license agreement URL | **VERIFIED** | `https://atlynco.github.io/atlyn-powerbi-support/legal/terms/` — independently verified anonymous HTTPS 200 |
+| Acquisition / commercial model | **APPROVED — EXISTING STOREFRONT SUBSCRIPTIONS** | Author use requires active paid/trial Atlyn all-access subscription; viewers require no separate subscription. Use existing Atlyn acquisition/subscription terms and approved links. |
+| Runtime entitlement behavior | **APPROVED — UNGATED** | Free shared viewing; no runtime license key, check, activation, signer, AAD/API, feature gates, WebAccess or runtime license calls. Author use requires active subscription on honor system; no runtime enforcement. |
 | Official Power BI certified badge | **REQUIRED TARGET — REQUEST/REVIEW PENDING** | Coordinator selects **Request Power BI certification** at the final gate and provides source/function review evidence. Microsoft awards after approval; no badge artwork or runtime change. |
 | Microsoft/Power BI licensing wording | **HOST REQUIREMENTS REMAIN** | Free shared viewing adds no Atlyn runtime gate; it does not waive Power BI licensing, report permissions or tenant policies. |
 | Support readiness | **BLOCKED** | Verified mailbox/URL ownership, content, staffing and approved service commitments, if any |

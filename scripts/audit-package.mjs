@@ -17,7 +17,7 @@ const resources = entries.filter(name => name.startsWith("resources/") && name.e
 assert.equal(resources.length, 1, "Expected one packaged visual resource");
 const payload = JSON.parse(await zip.file(resources[0]).async("string"));
 assert.equal(payload.visual.guid, "AtlynProcessLensA61D72B54E9F4B65A137E92DF84610C3");
-assert.equal(payload.visual.version, "1.0.1.0");
+assert.equal(payload.visual.version, "1.0.2.0");
 assert.equal(payload.visual.guid, config.visual.guid);
 assert.equal(payload.visual.version, config.visual.version);
 assert.deepEqual(payload.capabilities, capabilities);
