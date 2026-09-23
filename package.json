@@ -1,6 +1,6 @@
 {
   "name": "atlyn-process-lens",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "description": "Offline prepared-transition process-map analysis for Power BI",
   "scripts": {

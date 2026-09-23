@@ -19,7 +19,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Inspect the reciprocal cycle",
+                    "value": "V02 cycle & usage hints",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "22px",
@@ -32,7 +32,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Triage → Waiting: mean 1.75 hours.",
+                    "value": "• Field roles: Bound to Source, Target, Frequency, and Duration. Edge labels display mean elapsed hours when Duration overlay is active.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "13px",
@@ -45,7 +45,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Waiting → Triage: mean 2.50 hours.",
+                    "value": "• Right-click menu: Right-click any transition edge or activity to access drillthrough and standard host context actions.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "13px",
@@ -58,7 +58,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Triage → Resolved: mean 3.50 hours.",
+                    "value": "• Filters: The page filter restricts the model query to variant V02. Select an edge or table row to cross-filter other visuals.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "13px",
@@ -71,33 +71,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Every edge has frequency 2. The page filter limits the model query to V02.",
-                    "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "13px",
-                      "fontWeight": "normal",
-                      "color": "#172B4D"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "Elapsed time is not hands-on work or a causal bottleneck.",
-                    "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "13px",
-                      "fontWeight": "normal",
-                      "color": "#172B4D"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "A cycle is observable here; its business meaning is not inferred.",
+                    "value": "• Reciprocal cycle: Triage → Waiting (1.75h) and Waiting → Triage (2.50h) form a cycle; elapsed time reflects prepared means, not proven bottlenecks.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "13px",
@@ -119,7 +93,7 @@
             "altText": {
               "expr": {
                 "Literal": {
-                  "Value": "'Inspect the reciprocal cycle Triage → Waiting: mean 1.75 hours. Waiting → Triage: mean 2.50 hours. Triage → Resolved: mean 3.50 hours. Every edge has frequency 2. The page filter limits the model query to V02. Elapsed time is not hands-on work or a causal bottleneck. A cycle is observable here; its business meaning is not inferred.'"
+                  "Value": "'V02 cycle & usage hints • Field roles: Bound to Source, Target, Frequency, and Duration. Edge labels display mean elapsed hours when Duration overlay is active. • Right-click menu: Right-click any transition edge or activity to access drillthrough and standard host context actions. • Filters: The page filter restricts the model query to variant V02. Select an edge or table row to cross-filter other visuals. • Reciprocal cycle: Triage → Waiting (1.75h) and Waiting → Triage (2.50h) form a cycle; elapsed time reflects prepared means, not proven bottlenecks.'"
                 }
               }
             }

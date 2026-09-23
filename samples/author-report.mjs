@@ -4,8 +4,9 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { provenance } from "./prepare-transitions.mjs";
 
-export const guid = "AtlynProcessLensA61D72B54E9F4B65A137E92DF84610C3";
-export const version = "1.0.0.0";
+const pbivizJson = JSON.parse(readFileSync(fileURLToPath(new URL("../pbiviz.json", import.meta.url)), "utf8"));
+export const guid = pbivizJson.visual.guid;
+export const version = pbivizJson.visual.version;
 export const reportRoot = fileURLToPath(new URL("./SupportTickets/SupportTickets.Report/", import.meta.url));
 export const pageIds = ["SampleOverview", "VariantCycle", "RepeatedActivity", "Methodology"];
 export const roleFields = {
@@ -165,37 +166,38 @@ expression PreparedCsvBase64 = "${Buffer.from(csv).toString("base64")}"
       id: "SampleOverview", title: "01 · Workflow overview", variant: null, overlay: "frequency",
       heading: ["Atlyn Process Lens | Synthetic support tickets",
         "01 / ALL VARIANTS     •     Prepared workflow frequency     •     Source fixture: 6 cases / 30 events / 24 transitions"],
-      notes: ["Read the overview",
-        "All three supplied variants contribute to this map.",
-        "Shared edges: frequency 6; combined duration unavailable.",
-        "Variant-only cycle and self-loop edges: frequency 2.",
-        "The native table groups by edge; its duration guard returns blank for shared edges.",
-        "Local exploration is not a report filter. Use explicit report selection to filter the table.",
-        "Counts above describe the complete fixture, not the current selection."]
+      notes: [
+        "Read the overview & usage hints",
+        "• Field roles: Drag 'source' & 'target' to Source/Target Activity ID; 'Prepared Frequency' to Transition Frequency; 'Prepared Duration' to Duration; 'variant' to Variant; 'rowKey' to Prepared Row ID.",
+        "• Right-click menu: Right-click any activity node, transition edge, or blank canvas area for the native Power BI context menu.",
+        "• Filtering & selection: Click an activity to focus locally; click an edge or table row to cross-filter other report visuals.",
+        "• Slicing: Use the filter pane (or variant slicers) to filter variants across the model.",
+        "• Interpretation: Shared edges show total frequency (6); duration statistics remain uncombined across multiple contributing rows."
+      ]
     },
     {
       id: "VariantCycle", title: "02 · V02 cycle and duration", variant: "V02", overlay: "duration",
       heading: ["V02 | A waiting cycle, without invented causality",
         "02 / MODEL FILTER: V02     •     2 synthetic cases / 10 adjacent transitions / 5 prepared edges"],
-      notes: ["Inspect the reciprocal cycle",
-        "Triage → Waiting: mean 1.75 hours.",
-        "Waiting → Triage: mean 2.50 hours.",
-        "Triage → Resolved: mean 3.50 hours.",
-        "Every edge has frequency 2. The page filter limits the model query to V02.",
-        "Elapsed time is not hands-on work or a causal bottleneck.",
-        "A cycle is observable here; its business meaning is not inferred."]
+      notes: [
+        "V02 cycle & usage hints",
+        "• Field roles: Bound to Source, Target, Frequency, and Duration. Edge labels display mean elapsed hours when Duration overlay is active.",
+        "• Right-click menu: Right-click any transition edge or activity to access drillthrough and standard host context actions.",
+        "• Filters: The page filter restricts the model query to variant V02. Select an edge or table row to cross-filter other visuals.",
+        "• Reciprocal cycle: Triage → Waiting (1.75h) and Waiting → Triage (2.50h) form a cycle; elapsed time reflects prepared means, not proven bottlenecks."
+      ]
     },
     {
       id: "RepeatedActivity", title: "03 · V03 repeated activity", variant: "V03", overlay: "duration",
       heading: ["V03 | Consecutive triage events remain visible",
         "03 / MODEL FILTER: V03     •     2 synthetic cases / 8 adjacent transitions / 4 prepared edges"],
-      notes: ["Inspect the self-loop",
-        "Triage → Triage: frequency 2; mean 0.25 hours.",
-        "One interval is zero; the other is 0.50 hours.",
-        "Distinct sequence values order the equal-time events.",
-        "The page filter limits the model query to V03.",
-        "Repeated activity is not automatically rework, an error, or a reopened case.",
-        "Prepared values are supplied statistics; the visual does not recompute them."]
+      notes: [
+        "V03 repeated activity & usage hints",
+        "• Field roles: 'rowKey' preserves event grain; self-loop Triage → Triage is retained with frequency 2 and mean duration 0.25h.",
+        "• Right-click menu: Right-click self-loops or activity nodes for the native Power BI context menu.",
+        "• Filters & navigation: Filtered to variant V03. Use local traversal controls (Incident, Upstream, Downstream) to explore topology.",
+        "• Interpretation: Distinct sequence numbers order equal-time events; loops indicate repeated activity, not automatic rework."
+      ]
     }
   ];
   for (const spec of graphPages) {
@@ -227,13 +229,13 @@ expression PreparedCsvBase64 = "${Buffer.from(csv).toString("base64")}"
     "Fixture checks: 30 − 6 = 24 transitions; elapsed intervals total 41 hours."
   ]));
   add(`${method}\\visuals\\QualityMethod\\visual.json`, textbox("QualityMethod", position(652, 118, 604, 218, 2), [
-    "Interpretation boundaries",
-    "Frequency sums; runtime duration statistics never aggregate.",
+    "Interpretation boundaries & usage",
+    "Field roles: drag text source/target, numeric frequency/duration, and optional variant/rowKey.",
+    "Right-click any visual element for native Power BI context menu actions.",
+    "Cross-filtering: select edges or activities to filter connected report visuals.",
+    "Frequency sums; runtime duration statistics never aggregate across multiple variants.",
     "Multiple contributors to an edge make its duration unavailable.",
-    "COUNTROWS = 1 guards the model's Prepared Duration measure.",
-    "rowKey preserves contributor identity; tooltip fields describe provenance.",
-    "No raw-log mining, inferred cases, discovered variants, or rework labels.",
-    "This source report still requires native Desktop acceptance."
+    "rowKey preserves contributor identity; tooltip fields describe provenance."
   ]));
   add(`${method}\\visuals\\QualityTable\\visual.json`, table("QualityTable", position(24, 352, 1232, 344, 3),
     ["rowKey", "variant", "source", "target", "Prepared Frequency", "Prepared Duration", "statistic", "unit", "provenance"],

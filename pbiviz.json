@@ -4,9 +4,9 @@
     "displayName": "Atlyn Process Lens",
     "guid": "AtlynProcessLensA61D72B54E9F4B65A137E92DF84610C3",
     "visualClassName": "Visual",
-    "version": "1.0.1.0",
+    "version": "1.0.2.0",
     "description": "Offline analysis of prepared activity transitions. Preserves cycles and exposes frequency, supplied duration statistics, and data completeness.",
-    "supportUrl": "https://www.atlynco.com/docs/faq",
+    "supportUrl": "https://atlynco.github.io/atlyn-powerbi-support/docs/faq/",
     "gitHubUrl": "https://github.com/AtlynCo/powerbi-process-lens"
   },
   "apiVersion": "5.11.0",

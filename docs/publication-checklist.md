@@ -10,7 +10,7 @@ The coordinator approved the following existing metadata and verified the public
 | --- | --- |
 | `author.name` | `Atlyn` |
 | `author.email` | `atlyn.help@gmail.com` |
-| `supportUrl` | <https://www.atlynco.com/docs/faq> |
+| `supportUrl` | <https://atlynco.github.io/atlyn-powerbi-support/docs/faq/> |
 | `gitHubUrl` | <https://github.com/AtlynCo/powerbi-process-lens> (private source repository) |
 
 These are not missing or placeholder contact details. Approval of sourced metadata does not establish mailbox monitoring, response times, ongoing support responsiveness, or release readiness. The private [issue tracker](https://github.com/AtlynCo/powerbi-process-lens/issues) remains collaborator-only, not the public support channel.
