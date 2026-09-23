@@ -19,7 +19,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Inspect the self-loop",
+                    "value": "V03 repeated activity & usage hints",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "22px",
@@ -32,7 +32,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Triage → Triage: frequency 2; mean 0.25 hours.",
+                    "value": "• Field roles: 'rowKey' preserves event grain; self-loop Triage → Triage is retained with frequency 2 and mean duration 0.25h.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "13px",
@@ -45,7 +45,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "One interval is zero; the other is 0.50 hours.",
+                    "value": "• Right-click menu: Right-click self-loops or activity nodes for the native Power BI context menu.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "13px",
@@ -58,7 +58,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Distinct sequence values order the equal-time events.",
+                    "value": "• Filters & navigation: Filtered to variant V03. Use local traversal controls (Incident, Upstream, Downstream) to explore topology.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "13px",
@@ -71,33 +71,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "The page filter limits the model query to V03.",
-                    "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "13px",
-                      "fontWeight": "normal",
-                      "color": "#172B4D"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "Repeated activity is not automatically rework, an error, or a reopened case.",
-                    "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "13px",
-                      "fontWeight": "normal",
-                      "color": "#172B4D"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "Prepared values are supplied statistics; the visual does not recompute them.",
+                    "value": "• Interpretation: Distinct sequence numbers order equal-time events; loops indicate repeated activity, not automatic rework.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "13px",
@@ -119,7 +93,7 @@
             "altText": {
               "expr": {
                 "Literal": {
-                  "Value": "'Inspect the self-loop Triage → Triage: frequency 2; mean 0.25 hours. One interval is zero; the other is 0.50 hours. Distinct sequence values order the equal-time events. The page filter limits the model query to V03. Repeated activity is not automatically rework, an error, or a reopened case. Prepared values are supplied statistics; the visual does not recompute them.'"
+                  "Value": "'V03 repeated activity & usage hints • Field roles: ''rowKey'' preserves event grain; self-loop Triage → Triage is retained with frequency 2 and mean duration 0.25h. • Right-click menu: Right-click self-loops or activity nodes for the native Power BI context menu. • Filters & navigation: Filtered to variant V03. Use local traversal controls (Incident, Upstream, Downstream) to explore topology. • Interpretation: Distinct sequence numbers order equal-time events; loops indicate repeated activity, not automatic rework.'"
                 }
               }
             }

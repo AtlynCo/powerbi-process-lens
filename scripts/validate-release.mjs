@@ -6,6 +6,8 @@ import { sha256, sourceInputs, hashesUnder } from "./release-files.mjs";
 
 const output = resolve("dist", "quality-evidence");
 mkdirSync(join(output, "logs"), { recursive: true });
+const config = JSON.parse(readFileSync("pbiviz.json", "utf8"));
+const packageArtifact = `dist\\${config.visual.guid}.${config.visual.version}.pbiviz`;
 const commands = [
   ["typecheck", "npm run typecheck"],
   ["eslint", "npm run eslint"],
@@ -16,8 +18,8 @@ const commands = [
   ["assets", "node scripts\\generate-icons.mjs --check"],
   ["certification-audit-package", "npm run audit:certification"],
   ["package-audit", "npm run audit:package"],
-  ["bound-report-sync", "node samples\\sync-report-package.mjs --package dist\\AtlynProcessLensA61D72B54E9F4B65A137E92DF84610C3.1.0.0.0.pbiviz"],
-  ["bound-report-exact-check", "node samples\\sync-report-package.mjs --package dist\\AtlynProcessLensA61D72B54E9F4B65A137E92DF84610C3.1.0.0.0.pbiviz --check"],
+  ["bound-report-sync", `node samples\\sync-report-package.mjs --package ${packageArtifact}`],
+  ["bound-report-exact-check", `node samples\\sync-report-package.mjs --package ${packageArtifact} --check`],
   ["bound-report-check", "node samples\\check-report-source.mjs --schemas"],
   ["package-browser", "npm run test:browser"],
   ["all-dependencies", "npm audit --json"],

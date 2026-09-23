@@ -19,7 +19,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Interpretation boundaries",
+                    "value": "Interpretation boundaries & usage",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "22px",
@@ -32,7 +32,46 @@
               {
                 "textRuns": [
                   {
-                    "value": "Frequency sums; runtime duration statistics never aggregate.",
+                    "value": "Field roles: drag text source/target, numeric frequency/duration, and optional variant/rowKey.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "13px",
+                      "fontWeight": "normal",
+                      "color": "#172B4D"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Right-click any visual element for native Power BI context menu actions.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "13px",
+                      "fontWeight": "normal",
+                      "color": "#172B4D"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Cross-filtering: select edges or activities to filter connected report visuals.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "13px",
+                      "fontWeight": "normal",
+                      "color": "#172B4D"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Frequency sums; runtime duration statistics never aggregate across multiple variants.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "13px",
@@ -58,46 +97,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "COUNTROWS = 1 guards the model's Prepared Duration measure.",
-                    "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "13px",
-                      "fontWeight": "normal",
-                      "color": "#172B4D"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
                     "value": "rowKey preserves contributor identity; tooltip fields describe provenance.",
-                    "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "13px",
-                      "fontWeight": "normal",
-                      "color": "#172B4D"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "No raw-log mining, inferred cases, discovered variants, or rework labels.",
-                    "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "13px",
-                      "fontWeight": "normal",
-                      "color": "#172B4D"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "This source report still requires native Desktop acceptance.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "13px",
@@ -119,7 +119,7 @@
             "altText": {
               "expr": {
                 "Literal": {
-                  "Value": "'Interpretation boundaries Frequency sums; runtime duration statistics never aggregate. Multiple contributors to an edge make its duration unavailable. COUNTROWS = 1 guards the model''s Prepared Duration measure. rowKey preserves contributor identity; tooltip fields describe provenance. No raw-log mining, inferred cases, discovered variants, or rework labels. This source report still requires native Desktop acceptance.'"
+                  "Value": "'Interpretation boundaries & usage Field roles: drag text source/target, numeric frequency/duration, and optional variant/rowKey. Right-click any visual element for native Power BI context menu actions. Cross-filtering: select edges or activities to filter connected report visuals. Frequency sums; runtime duration statistics never aggregate across multiple variants. Multiple contributors to an edge make its duration unavailable. rowKey preserves contributor identity; tooltip fields describe provenance.'"
                 }
               }
             }

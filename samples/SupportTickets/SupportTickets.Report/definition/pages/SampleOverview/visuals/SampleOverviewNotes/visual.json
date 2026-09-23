@@ -19,7 +19,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Read the overview",
+                    "value": "Read the overview & usage hints",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "22px",
@@ -32,7 +32,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "All three supplied variants contribute to this map.",
+                    "value": "• Field roles: Drag 'source' & 'target' to Source/Target Activity ID; 'Prepared Frequency' to Transition Frequency; 'Prepared Duration' to Duration; 'variant' to Variant; 'rowKey' to Prepared Row ID.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "13px",
@@ -45,7 +45,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Shared edges: frequency 6; combined duration unavailable.",
+                    "value": "• Right-click menu: Right-click any activity node, transition edge, or blank canvas area for the native Power BI context menu.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "13px",
@@ -58,7 +58,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Variant-only cycle and self-loop edges: frequency 2.",
+                    "value": "• Filtering & selection: Click an activity to focus locally; click an edge or table row to cross-filter other report visuals.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "13px",
@@ -71,7 +71,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "The native table groups by edge; its duration guard returns blank for shared edges.",
+                    "value": "• Slicing: Use the filter pane (or variant slicers) to filter variants across the model.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "13px",
@@ -84,20 +84,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Local exploration is not a report filter. Use explicit report selection to filter the table.",
-                    "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "13px",
-                      "fontWeight": "normal",
-                      "color": "#172B4D"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "Counts above describe the complete fixture, not the current selection.",
+                    "value": "• Interpretation: Shared edges show total frequency (6); duration statistics remain uncombined across multiple contributing rows.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "13px",
@@ -119,7 +106,7 @@
             "altText": {
               "expr": {
                 "Literal": {
-                  "Value": "'Read the overview All three supplied variants contribute to this map. Shared edges: frequency 6; combined duration unavailable. Variant-only cycle and self-loop edges: frequency 2. The native table groups by edge; its duration guard returns blank for shared edges. Local exploration is not a report filter. Use explicit report selection to filter the table. Counts above describe the complete fixture, not the current selection.'"
+                  "Value": "'Read the overview & usage hints • Field roles: Drag ''source'' & ''target'' to Source/Target Activity ID; ''Prepared Frequency'' to Transition Frequency; ''Prepared Duration'' to Duration; ''variant'' to Variant; ''rowKey'' to Prepared Row ID. • Right-click menu: Right-click any activity node, transition edge, or blank canvas area for the native Power BI context menu. • Filtering & selection: Click an activity to focus locally; click an edge or table row to cross-filter other report visuals. • Slicing: Use the filter pane (or variant slicers) to filter variants across the model. • Interpretation: Shared edges show total frequency (6); duration statistics remain uncombined across multiple contributing rows.'"
                 }
               }
             }
