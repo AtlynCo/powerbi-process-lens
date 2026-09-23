@@ -25,7 +25,7 @@ The required badge is not a purchase/IAP badge or a graphic to add to the visual
 
 No first-party `LICENSE`/`LICENCE` file or `package.json` license declaration is present in the inspected source baseline. Preserve the named third-party licenses; do not infer an Atlyn-wide license from them or invent relicensing. Free shared viewing does not waive Power BI licensing/permissions.
 
-Preserve all frozen evidence. No repackage or version bump is needed while runtime is unchanged. Main/certification advancement, merge and submission remain on hold for the coordinator's final gate; native validation, genuine PBIX conversion and final assets are still coordinator-owned.
+Preserve all frozen evidence. The separate `1.0.3.0` runtime repair needs a distinct package and new native acceptance; the `1.0.2.0` diagnostic PBIX is not submission-ready. Main/certification advancement, merge and submission remain on hold for the coordinator's final gate; native validation and genuine PBIX conversion require an explicit exclusive Desktop transfer.
 
 ## Owner-controlled release gates and remaining blockers
 
@@ -38,7 +38,7 @@ Preserve all frozen evidence. No repackage or version bump is needed while runti
 
 ## Product and package review
 
-- [ ] Confirm display name **Atlyn Process Lens**, frozen GUID `AtlynProcessLensA61D72B54E9F4B65A137E92DF84610C3`, and release version `1.0.0.0` against the packaged resource/manifest.
+- [ ] Confirm display name **Atlyn Process Lens**, frozen GUID `AtlynProcessLensA61D72B54E9F4B65A137E92DF84610C3`, and selected candidate version (currently `1.0.3.0`) against the packaged resource/manifest.
 - [ ] Run and retain actual typecheck, lint, unit, browser, packaging, package-audit, official-tooling certification-audit, and full/production dependency-audit evidence. A named script is not proof it passed; `npm run audit:certification` is not Microsoft certification.
 - [ ] Inspect the final package, original 20×20 icon, dependency licenses, and artifact checksum. Generate runtime notices with `npm run notices`, confirm the actual packaged visual's offline legal disclosure contains the full upstream text, and retain the additional `THIRD-PARTY-NOTICES.txt` sidecar in `dist`. Do not rely on a webpack license-sidecar pointer that the official archive omits. Review the open-source runtime formatting dependency and all bundled code; do not assume a dependency's presence implies approval.
 - [ ] Review `privileges: []`, absent external services/network/telemetry/auth/licensing code, safe rendering, and data minimization in the actual artifact. Package signature scans are heuristic, not a complete security or privacy assessment.
@@ -53,6 +53,7 @@ Preserve all frozen evidence. No repackage or version bump is needed while runti
 
 - [ ] Open/refresh the populated source-authored offline PBIP in supported Desktop, or record/review any Desktop-required corrections. Confirm all bound pages, exact package resources and the12-row native table.
 - [ ] Confirm supplied bindings and duration metadata, save/reopen/bookmarks/focus mode, and sample self-loop/cycle/metrics. Convert a real offline PBIX containing the exact visual for submission.
+- [ ] After a cold reopen, check the **first visit** to V02 and V03 without revisiting: both must show duration, not frequency (V02 max 3.50 hours and V03 max 2.25 hours; reciprocal edges 1.75/2.50 hours, self-loop 0.25 hours). The `1.0.2.0` diagnostic PBIX failed this gate.
 - [ ] Execute Desktop interaction, invalid-input, bounds, model-grain, context-menu, and native tooltip checks from [validation](validation.md).
 - [ ] Execute keyboard-only and screen-reader checks in actual Desktop and Service, including focus, selected state, context menus, high contrast, zoom, and small containers. No accessibility compliance claim based only on ARIA markup or a browser harness.
 - [ ] Verify English/French UI, English fallback, RTL in relevant host locales, and reduced-motion/no-animation behavior.

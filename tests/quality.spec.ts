@@ -170,6 +170,46 @@ test("bookmark-style metadata round-trip restores local view without host select
   await expect(page.locator('[data-issue="navigationInvalid"]')).toBeVisible();
 });
 
+for (const variant of ["V02", "V03"] as const) {
+  test(`${variant} duration overlay survives initial unbound and subsequent role-less updates`, async ({ page }) => {
+    const rows = preparedFixture().table!.rows!.filter(row => row[4] === variant);
+    const data = fixture(rows);
+    const navigation = JSON.stringify({ ...DEFAULT_NAVIGATION, overlay: "duration" });
+    data.metadata.objects = { ...data.metadata.objects, navigation: { state: navigation } };
+    const unbound = structuredClone(data);
+    unbound.metadata.columns = [];
+    unbound.table = undefined;
+    await openPackage(page, { data: unbound });
+    await expect(page.locator(".first-run")).toBeVisible();
+
+    const update = async (input: typeof data) => page.evaluate(dataView => {
+      window.visual.update({ viewport: { width: 1280, height: 620 }, type: 2, dataViews: [dataView] });
+    }, input);
+    const maximum = variant === "V02" ? "3.50" : "2.25";
+    const sampleLabel = variant === "V02" ? "1.75 hours" : "0.25 hours";
+    await update(data);
+    await expect(page.locator(".summary").first()).toContainText(`${rows.length}/${rows.length}`);
+    await expect(page.locator(".legend")).toContainText(`Prepared duration; max ${maximum} hours (mean)`);
+    await expect(page.locator(".edge-label").filter({ hasText: sampleLabel })).toHaveCount(1);
+    await controlsPanel(page);
+    await expect(page.locator('[data-focus="overlay"]')).toHaveValue("duration");
+
+    const withoutDuration = structuredClone(data);
+    withoutDuration.metadata.columns = withoutDuration.metadata.columns.filter(column => !column.roles?.duration);
+    withoutDuration.table!.columns = withoutDuration.table!.columns.filter(column => !column.roles?.duration);
+    withoutDuration.table!.rows = withoutDuration.table!.rows!.map(row => row.filter((_value, index) => index !== 3));
+    await update(withoutDuration);
+    await expect(page.locator(".legend")).toContainText("Transition frequency; max 2.");
+    await expect(page.locator('[data-focus="overlay"]')).toHaveValue("frequency");
+
+    await update(data);
+    await expect(page.locator(".legend")).toContainText(`Prepared duration; max ${maximum} hours (mean)`);
+    await expect(page.locator(".edge-label").filter({ hasText: sampleLabel })).toHaveCount(1);
+    await expect(page.locator('[data-focus="overlay"]')).toHaveValue("duration");
+    expect(await page.evaluate(() => window.harness.persisted)).toEqual([]);
+  });
+}
+
 test("persisted formatting, row reorder, context errors, tooltip errors and disposal are explicit", async ({ page }) => {
   const data = fixture();
   await openPackage(page, { data });

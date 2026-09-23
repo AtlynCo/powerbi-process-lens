@@ -79,6 +79,10 @@ export class ProcessView {
     this.query = state.query; this.focus = state.focus; this.variant = state.variant;
     this.mode = state.mode; this.overlay = state.overlay; this.zoom = state.zoom; this.panel = state.panel;
   }
+  private effectiveOverlay(): Navigation["overlay"] {
+    // A transient unbound update must not erase the requested duration overlay.
+    return this.model?.hasDuration && this.overlay === "duration" ? "duration" : "frequency";
+  }
   private persist(): void {
     this.actions.persist({ query: this.query, focus: this.focus, variant: this.variant, mode: this.mode, overlay: this.overlay === "duration" ? "duration" : "frequency", zoom: this.zoom, panel: this.panel });
   }
@@ -88,7 +92,6 @@ export class ProcessView {
     this.theme = theme;
     if (this.variant !== null && !model.variants.includes(this.variant)) this.variant = null;
     if (this.focus !== null && !model.nodes.includes(this.focus)) this.focus = null;
-    if (!model.hasDuration) this.overlay = "frequency";
     const active = document.activeElement;
     const focusKey = active instanceof HTMLElement && this.root.contains(active) ? active.dataset.focus : undefined;
     const selectionStart = active instanceof HTMLInputElement ? active.selectionStart : null;
@@ -226,7 +229,7 @@ export class ProcessView {
     }
     controls.append(this.dropdown(this.t("overlay"), "overlay",
       model.hasDuration ? [["frequency", this.t("frequency")], ["duration", this.t("duration")]] : [["frequency", this.t("frequency")]],
-      this.overlay, value => { this.overlay = value; this.refresh(); }));
+      this.effectiveOverlay(), value => { this.overlay = value; this.refresh(); }));
     controls.append(this.button(this.t("clear"), "clear", () => this.actions.clear()));
     controls.append(this.button(this.t("reset"), "reset", () => {
       this.variant = null; this.focus = null; this.mode = "all"; this.query = ""; this.zoom = 1;
@@ -295,9 +298,10 @@ export class ProcessView {
   }
 
   private edgeLabel(edge: Edge): string {
-    const value = this.overlay === "duration" ? edge.duration : edge.frequency;
-    const formatted = value === null ? this.t("shortUnavailable") : this.actions.format(value, this.overlay);
-    return this.overlay === "duration" && value !== null ? `${formatted} ${this.model?.metric.unit ?? ""}` : formatted;
+    const overlay = this.effectiveOverlay();
+    const value = overlay === "duration" ? edge.duration : edge.frequency;
+    const formatted = value === null ? this.t("shortUnavailable") : this.actions.format(value, overlay);
+    return overlay === "duration" && value !== null ? `${formatted} ${this.model?.metric.unit ?? ""}` : formatted;
   }
 
   private edgeTooltip(edge: Edge): Tooltip[] {
@@ -395,7 +399,8 @@ export class ProcessView {
     resize();
     zoom.addEventListener("input", () => { this.zoom = Number(zoom.value); resize(); });
     zoom.addEventListener("change", () => this.persist());
-    const available = visible.edges.map(edge => this.overlay === "duration" ? edge.duration : edge.frequency).filter(value => value !== null);
+    const overlay = this.effectiveOverlay();
+    const available = visible.edges.map(edge => overlay === "duration" ? edge.duration : edge.frequency).filter(value => value !== null);
     const maximum = Math.max(0, ...available);
     const scaleMaximum = Math.max(1, maximum);
     // Arrow polygons are per edge: no global SVG IDs to collide across visual instances.
@@ -403,7 +408,7 @@ export class ProcessView {
       const position = this.cachedRoutes.get(edge.key);
       if (!position) continue;
       const group = svg("g", { class: "edge", "data-key": edge.key });
-      const metric = this.overlay === "duration" ? edge.duration : edge.frequency;
+      const metric = overlay === "duration" ? edge.duration : edge.frequency;
       const path = svg("path", { d: position.path, class: "edge-line", "stroke-width": 1.5 + 7 * ((metric ?? 0) / scaleMaximum) });
       if (metric === null || metric === 0) path.setAttribute("stroke-dasharray", "5 4");
       const hit = svg("path", { d: position.path, class: "edge-hit", "stroke-width": 16 });
@@ -446,8 +451,8 @@ export class ProcessView {
       this.bindRepresentation(group, rows, [{ displayName: this.t("activity"), value: node.id }, { displayName: this.t("incident"), value: String(rows.length) }], false);
       image.append(group);
     }
-    section.append(element("p", `${this.t(this.overlay === "duration" ? "duration" : "frequency")}; max ${available.length ? this.actions.format(maximum, this.overlay) : this.t("unavailable")}${this.overlay === "duration" ? ` ${model.metric.unit} (${model.metric.statistic})` : ""}. ${this.t("legend")}`, "legend"));
-    if (this.overlay === "duration" && available.length) {
+    section.append(element("p", `${this.t(overlay === "duration" ? "duration" : "frequency")}; max ${available.length ? this.actions.format(maximum, overlay) : this.t("unavailable")}${overlay === "duration" ? ` ${model.metric.unit} (${model.metric.statistic})` : ""}. ${this.t("legend")}`, "legend"));
+    if (overlay === "duration" && available.length) {
       const ranked = visible.edges.filter(edge => edge.duration === maximum);
       section.append(element("p", `${this.t("ranked")}: ${ranked.slice(0, 3).map(edge => `${edge.source} -> ${edge.target}`).join("; ")}${ranked.length > 3 ? ` (+${ranked.length - 3})` : ""}. ${this.t("rankedNote")}`, "ranked-note"));
     }

@@ -2,6 +2,8 @@
 
 All identifiers, dates, events, and values here were constructed for this repository. There are no customer tickets, names, email addresses, comments, or production extracts. “Sanitized” means this example contains only invented, minimal fields; the script is **not** a redaction tool for real data.
 
+The `1.0.3.0` overlay-repair candidate must be packaged and staged separately from the frozen `1.0.2.0` PBIP and diagnostic PBIX. That PBIX preserved correct data/resources but displayed frequency instead of saved duration on the first V02/V03 visit after a cold reopen; it is not an accepted native sample. The candidate requires a fresh exclusive Desktop transfer for native acceptance.
+
 ## Files
 
 | File | Purpose |
@@ -50,7 +52,7 @@ Supply an existing trusted assembly path, keeping its sibling dependencies toget
 
 The separately supplied retry folder is **provisional sample-only evidence** and retains the exact `1.0.0.0` package without runtime entitlement checks. It does not replace the sealed `eeae7c0` bundle or move its certification ref. On September 10, 2026 the owner approved existing Atlyn storefront subscriptions with **ungated visuals and free shared viewing**; awaiting runtime paid integration is no longer a blocker. No keys, signer, AAD/API checks, feature gates or external license calls are to be added.
 
-Frozen bundles and their historical records stay unchanged. This documentation-only clarification does not require repackaging or a visual-version bump. The required target is Microsoft's official **Power BI certified** badge, requested with Partner Center's **Request Power BI certification** checkbox. Request/review are pending; Microsoft awards it after additional source/function review. It is not a purchase/IAP badge or artwork to add to the visual. Native retry, genuine PBIX conversion and final normal listing assets remain coordinator-owned; main/certification advancement, merge and submission wait for the coordinator's final gate. This approval does not add a first-party source-code license or waive Power BI's own licensing.
+Frozen bundles and their historical records stay unchanged. The earlier distribution clarification did not require repackaging; the separate `1.0.3.0` runtime repair does. The required target is Microsoft's official **Power BI certified** badge, requested with Partner Center's **Request Power BI certification** checkbox. Request/review are pending; Microsoft awards it after additional source/function review. It is not a purchase/IAP badge or artwork to add to the visual. Native retry and genuine PBIX conversion require separate authorized Desktop access; final listing assets, main/certification advancement, merge and submission wait for the coordinator's final gate. This approval does not add a first-party source-code license or waive Power BI's own licensing.
 
 Preparation, report authoring and unsynchronized source checking use only Node built-ins. Package synchronization and synchronized-source archive checks use the repository's existing `jszip` dependency. No core sample command requires an external service or uploads report data. Optional `check-report-source.mjs --schemas` uses the existing `ajv` dependency and fetches only public Microsoft schemas into memory.
 
@@ -134,17 +136,19 @@ Each map has `metrics.statistic = mean`, `metrics.unit = hours`, and the full pr
 
 ## Synchronize the exact final package
 
-**Status boundary:** the report is source-authored, not Desktop-saved or native-host-validated. The authored private custom-visual registration is real PBIR structure, but the final runtime bytes must be supplied by this explicit step. An older archive may be inspected read-only; that is not synchronization or final release evidence.
+**Status boundary:** the `1.0.3.0` candidate report is source-authored, not Desktop-saved or native-host-validated. The authored private custom-visual registration is real PBIR structure, but the final runtime bytes must be supplied by this explicit step. An older archive may be inspected read-only; that is not synchronization or final release evidence.
 
 After the final build, package audit and icon generation have completed:
 
 ```powershell
-$package = ".\dist\AtlynProcessLensA61D72B54E9F4B65A137E92DF84610C3.1.0.0.0.pbiviz"
+$package = ".\dist\AtlynProcessLensA61D72B54E9F4B65A137E92DF84610C3.1.0.3.0.pbiviz"
 node .\samples\sync-report-package.mjs --package $package
 node .\samples\sync-report-package.mjs --package $package --check
 node .\samples\check-report-source.mjs
 node .\samples\check-report-source.mjs --schemas
 ```
+
+The `--schemas` command fetches public Microsoft JSON schemas; omit it during strictly offline validation.
 
 The synchronizer checks ZIP CRCs, GUID/version, manifest/resource references, offline privilege expectations, seven role bindings and declared format properties **before writing anything**. It never executes bundled JavaScript. It writes:
 
@@ -170,7 +174,7 @@ After final synchronization and strict checks, the release owner must seal the *
 
 The `CustomVisual` entry in `definition\report.json` registers a `CustomVisualMetadata` item named `<GUID>.pbiviz.json`. This is a **private file visual**, not an AppSource or organizational visual. Power BI's documented project layout uses `CustomVisuals` for these package files; `StaticResources\RegisteredResources` holds this report's original theme. We do not mislabel an archive as an image resource or invent an AppSource registration.
 
-`--check` compares the report's exact archive and every extracted file against the supplied final `.pbiviz`; `check-report-source.mjs` checks the generated manifest hashes without requiring `dist`. Rerun sync and checks after **every rebuild**, even if version `1.0.0.0` is unchanged. The script cannot determine whether a caller selected the latest build; final package selection and release evidence remain the caller's responsibility. Keep generated third-party notices alongside any distributed package.
+`--check` compares the report's exact archive and every extracted file against the supplied final `.pbiviz`; `check-report-source.mjs` checks the generated manifest hashes without requiring `dist`. Rerun sync and checks after **every rebuild**, even if the version is unchanged. The script cannot determine whether a caller selected the latest build; final package selection and release evidence remain the caller's responsibility. Keep generated third-party notices alongside any distributed package.
 
 ## Open the offline PBIP
 
@@ -178,9 +182,10 @@ The `CustomVisual` entry in `definition\report.json` registers a `CustomVisualMe
 2. Use a current Power BI Desktop version supporting PBIP, TMDL and enhanced PBIR; enable relevant preview options if needed.
 3. Open `SupportTickets\SupportTickets.pbip` and refresh. The default empty `CsvPath` parameter loads the exact prepared CSV embedded in `PreparedCsvBase64` through `Binary.FromText`. There is **no machine-specific path, web connector, gateway, customer data or raw event import** required for this default fixture.
 4. Check the four pages and expected values above. Confirm all three packaged custom visuals render, not just the native tables. Observe organization policy for private custom visuals.
-5. Verify native table selection, keyboard navigation, local exploration, bookmark persistence and duration-unavailable messages. Validate tooltips against the provenance columns. Record Desktop version, exact package hash and outcomes.
-6. Save in Desktop and record any metadata normalization or compatibility fixes. A native sample `.pbix` is **mandatory for certification**: the authorized owner must create it through Desktop and separately reopen/verify it. A renamed archive, authored PBIP or schema check is not a PBIX.
-7. Service, refresh deployment and export acceptance require separate authorized validation. No cloud publication is part of these scripts.
+5. On the **first visit after a cold reopen**, before revisiting either page, confirm V02 and V03 display their saved duration overlay (V02 max 3.50 hours, V03 max 2.25 hours), including reciprocal 1.75/2.50-hour edges and the 0.25-hour self-loop. A later page revisit is not a substitute for this check.
+6. Verify native table selection, keyboard navigation, local exploration, bookmark persistence and duration-unavailable messages. Validate tooltips against the provenance columns. Record Desktop version, exact package hash and outcomes.
+7. Save in Desktop and record any metadata normalization or compatibility fixes. A native sample `.pbix` is **mandatory for certification**: the authorized owner must create it through Desktop and separately reopen/verify it. A renamed archive, authored PBIP or schema check is not a PBIX.
+8. Service, refresh deployment and export acceptance require separate authorized validation. No cloud publication is part of these scripts.
 
 For an optional external-file refresh experiment, set **Transform data → Manage parameters → CsvPath** to the absolute local path of a prepared CSV with this nine-column schema. Empty it to restore the embedded fixture. If editing M source with Desktop closed, use literal backslashes in M text, not JSON-style doubled backslashes. A nonempty path is local-only and changes the refresh/deployment requirements; it is not part of the zero-configuration sample.
 
