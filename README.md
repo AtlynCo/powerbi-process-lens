@@ -6,7 +6,7 @@ A Power BI custom visual for **analysis of prepared process maps**. It displays 
 | --- | --- |
 | Display name | Atlyn Process Lens |
 | Frozen visual GUID | `AtlynProcessLensA61D72B54E9F4B65A137E92DF84610C3` |
-| Visual version | `1.0.3.0` candidate; native acceptance pending |
+| Visual version | Selected `1.0.3.0` baseline; this follow-up has no newly accepted package or native sample |
 
 ## What it shows
 
@@ -60,7 +60,7 @@ The repository includes:
 
 The example has 30 events, six synthetic tickets, three supplied variants, five activities, and 24 adjacent transitions prepared into 12 rows. It includes `Triage → Waiting → Triage` and `Triage → Triage`. Elapsed adjacent-event time totals 41 hours. Ticket counts come from the offline fixture, not graph inference.
 
-The `1.0.3.0` PBIP is source-authored and awaits native Power BI Desktop acceptance. A prior `1.0.2.0` diagnostic PBIX passed data and package-parity checks, but first visits to its V02/V03 pages after a cold reopen showed the frequency overlay instead of their saved duration overlay. That PBIX is **not accepted for submission**. The package synchronization command populates the candidate's generated custom-visual resources from the exact `.pbiviz`. Follow [the sample guide](samples/README.md) for preparation, bound fields and expected values. Source/schema and packaged-browser checks do not substitute for Desktop refresh, first-visit rendering or conversion to a newly accepted `.pbix`.
+The selected `1.0.3.0` package, staged PBIP, and native PBIX are frozen outside this worktree. This follow-up neither replaces them nor establishes native acceptance for a rebuilt package. A prior `1.0.2.0` diagnostic PBIX passed data and package-parity checks, but first visits to its V02/V03 pages after a cold reopen showed the frequency overlay instead of their saved duration overlay. That PBIX is **not accepted for submission**. The package synchronization command populates a candidate's generated custom-visual resources from the exact `.pbiviz`. Follow [the sample guide](samples/README.md) for preparation, bound fields and expected values. Source/schema and packaged-browser checks do not substitute for Desktop refresh, first-visit rendering or conversion to a newly accepted `.pbix`.
 
 ## Development
 
@@ -70,15 +70,19 @@ Build prerequisites: **Node.js 24.17**, **npm 11**, and **PowerShell 7** on Wind
 npm ci
 npm run typecheck
 npm run lint
+npm run eslint
 npm run test
 npm run notices
 npm run package
 npm run test:browser
 npm run audit:package
 npm run sample
+npm audit --audit-level=moderate
 ```
 
 All checks are **local-only**. This repository has no GitHub Actions workflow or hosted CI/CD dependency. Do not run cloud agents, Codespaces or hosted workflow runs as a release check. An installed Edge can run the isolated package harness without installing another browser: `$env:PROCESS_LENS_BROWSER_CHANNEL='msedge'`.
+
+`npm run lint` retains the focused source/test check; `npm run eslint` also checks the Node authoring and packaging scripts. Packaged-browser V02/V03 interaction tests use a synthetic host stub and do **not** establish native Desktop or Service acceptance.
 
 If Chromium is missing, run `npm run browser:install`; browser installation and execution use this worktree's ignored `.tmp/browsers`, not a shared browser cache. `npm run package` invokes the official Power BI visual tools through `scripts/package.mjs`. The wrapper creates an ephemeral development certificate with .NET `CertificateRequest` on Windows or OpenSSL elsewhere, scopes `HOME`/`USERPROFILE` to ignored `.tmp/package-home-*`, and removes that invocation's directory afterward. It does not write to certificate stores or change trust settings. No development server is required. This tooling certificate is not publisher signing or Microsoft certification.
 
@@ -94,7 +98,7 @@ npm audit
 npm audit --omit=dev
 ```
 
-`audit:certification` invokes the official tooling's certification-audit option through the same isolated wrapper; running or passing it is **not Microsoft certification**. Dependency-audit results describe the audited lockfile at that time and must be rechecked for release.
+`audit:certification` invokes the official tooling's certification-audit option through the same isolated wrapper; running or passing it is **not Microsoft certification**. Audit mode replaces the archive in `dist` with different bundled JavaScript, so rebuild with `npm run package` afterward, then re-audit, hash and browser-test that final normal package. Dependency-audit results describe the audited lockfile at that time and must be rechecked for release.
 
 Regenerate and independently check the sample and original icon without adding dependencies:
 
@@ -125,7 +129,7 @@ The owner explicitly requires Microsoft's official **Power BI certified** badge 
 
 **Current first-party license record:** at main commit `d03b38ba89ac2729471e06306dc6789643178f63`, there is no first-party `LICENSE`/`LICENCE` file and no `package.json` license declaration. `THIRD-PARTY-NOTICES.txt` applies only to its named dependencies, not the Atlyn product as a whole. This update does not add or change a license grant. Free shared viewing describes the approved runtime/distribution behavior, not a new source-code license or a waiver of Power BI requirements.
 
-The project is **not represented as Microsoft-certified or publication-ready**. Privacy/legal materials, existing subscription terms and listing accuracy, native-host validation, genuine PBIX conversion and final store-media approval remain owner gates. Desktop access requires an explicit exclusive transfer; the coordinator alone manages live Marketplace submission. Main/certification advancement, merge and submission remain on hold until the coordinator's final gate. Frozen evidence is preserved: the earlier distribution approval needed no runtime change, while the separate `1.0.3.0` overlay repair requires new package and native validation. No certification, service level, competitive superiority or business outcome is promised here.
+The project is **not represented as Microsoft-certified or publication-ready**. Privacy/legal materials, existing subscription terms and listing accuracy, native-host validation for any newly selected package, genuine version-matched PBIX conversion and final store-media approval remain owner gates. Desktop access requires an explicit exclusive transfer; the coordinator alone manages live Marketplace submission. Main/certification advancement, merge and submission remain on hold until the coordinator's final gate. The selected `1.0.3.0` package/native artifacts stay frozen; any different rebuilt archive requires separate versioned package/sample/native review before it can replace them. No certification, service level, competitive superiority or business outcome is promised here.
 
 Approved publisher/contact metadata: **Atlyn**, <atlyn.help@gmail.com>. Public support: <https://atlynco.github.io/atlyn-powerbi-support/docs/faq/>; the coordinator verified its support content. Listing this contact does not promise mailbox monitoring or response times.
 

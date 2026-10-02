@@ -66,6 +66,11 @@ assert(!definition.publicCustomVisuals?.includes(guid));
 for (const resource of definition.resourcePackages.filter(item => item.type === "RegisteredResources")) {
   for (const item of resource.items) assert(existsSync(join(report, "StaticResources", resource.name, item.path)), "Missing registered resource.");
 }
+const graphInteractions = {
+  SampleOverview: ["SampleOverviewProcessMap", "PreparedTransitionTable"],
+  VariantCycle: ["VariantCycleProcessMap", "VariantCycleTable"],
+  RepeatedActivity: ["RepeatedActivityProcessMap", "RepeatedActivityTable"]
+};
 let nativeTables = 0, customVisuals = 0, textboxes = 0;
 for (const name of pages.pageOrder) {
   const pageDirectory = join(report, "definition", "pages", name);
@@ -80,6 +85,11 @@ for (const name of pages.pageOrder) {
     assert.equal(filters[0].filter.Where[0].Condition.In.Values[0][0].Literal.Value, `'${expected}'`);
   } else assert(!page.filterConfig?.filters?.length, "Overview/methodology must show all variants initially.");
   const visualNames = readdirSync(join(pageDirectory, "visuals"));
+  const pair = graphInteractions[name];
+  assert.deepEqual(page.visualInteractions ?? [], pair ? [
+    { source: pair[0], target: pair[1], type: "DataFilter" },
+    { source: pair[1], target: pair[0], type: "NoFilter" }
+  ] : [], `${name}: unexpected map/table interaction direction or type.`);
   for (const interaction of page.visualInteractions ?? []) {
     assert(visualNames.includes(interaction.source) && visualNames.includes(interaction.target), "Dangling visual interaction.");
   }

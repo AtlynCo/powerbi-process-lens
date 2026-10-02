@@ -2,7 +2,7 @@
 
 All identifiers, dates, events, and values here were constructed for this repository. There are no customer tickets, names, email addresses, comments, or production extracts. “Sanitized” means this example contains only invented, minimal fields; the script is **not** a redaction tool for real data.
 
-The `1.0.3.0` overlay-repair candidate must be packaged and staged separately from the frozen `1.0.2.0` PBIP and diagnostic PBIX. That PBIX preserved correct data/resources but displayed frequency instead of saved duration on the first V02/V03 visit after a cold reopen; it is not an accepted native sample. The candidate requires a fresh exclusive Desktop transfer for native acceptance.
+The selected `1.0.3.0` package, staged PBIP, and native PBIX are frozen outside this worktree. Source/test follow-ups must not replace them or inherit native acceptance for different package bytes; a new selection requires a separate versioned package/sample and authorized Desktop review. The earlier `1.0.2.0` diagnostic PBIX preserved correct data/resources but displayed frequency instead of saved duration on the first V02/V03 visit after a cold reopen; it is not an accepted native sample.
 
 ## Files
 
@@ -114,7 +114,7 @@ When multiple variant rows are represented by one transition, frequency can add 
 | **03 · V03 repeated activity** | Actual page-level model filter `variant = V03`; duration overlay | Four edges; the `Triage → Triage` self-loop has frequency 2 and mean 0.25 h, preserving the zero-hour tie. |
 | **04 · Methodology and quality** | All variants; native text + nine-field table | All 12 prepared rows, row identities and duration provenance; interpretation and data-preparation limits. |
 
-Headers/notes identify **fixed fixture expectations**, not dynamic KPI cards. Native reference tables query the semantic model. On workflow pages, explicit custom-visual host selection filters the native table; selecting the native table does not filter the graph. Local search/focus/variant exploration remains distinct from a report filter.
+Headers/notes identify **fixed fixture expectations**, not dynamic KPI cards. Native reference tables query the semantic model. On each workflow page, the source check requires exactly map → table `DataFilter` and table → map `NoFilter`; explicit custom-visual host selection filters the native table, while selecting the native table does not filter the graph. Packaged-browser V02/V03 action tests use a synthetic host and do not prove those interactions in Desktop or Service. Local search/focus/variant exploration remains distinct from a report filter.
 
 ### Authored data roles and settings
 
@@ -136,7 +136,7 @@ Each map has `metrics.statistic = mean`, `metrics.unit = hours`, and the full pr
 
 ## Synchronize the exact final package
 
-**Status boundary:** the `1.0.3.0` candidate report is source-authored, not Desktop-saved or native-host-validated. The authored private custom-visual registration is real PBIR structure, but the final runtime bytes must be supplied by this explicit step. An older archive may be inspected read-only; that is not synchronization or final release evidence.
+**Status boundary:** the repository's PBIP is source-authored; the selected `1.0.3.0` native report and exact package are protected separately. The authored private custom-visual registration is real PBIR structure, but any new candidate's runtime bytes must be supplied by this explicit step and accepted independently. Inspecting an archive read-only is not synchronization or final release evidence.
 
 After the final build, package audit and icon generation have completed:
 

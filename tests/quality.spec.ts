@@ -210,6 +210,102 @@ for (const variant of ["V02", "V03"] as const) {
   });
 }
 
+test("packaged harness V02 keeps reciprocal selections, tooltips and context menus directional", async ({ page }) => {
+  await openPackage(page, { data: preparedFixture() });
+  await controlsPanel(page);
+  await page.locator('[data-focus="variant"]').selectOption({ label: "V02" });
+  await page.locator('[data-focus="overlay"]').selectOption("duration");
+
+  const forward = page.locator('.edge[data-key=\'["Triage","Waiting",""]\']');
+  const reverse = page.locator('.edge[data-key=\'["Waiting","Triage",""]\']');
+  await expect(forward.locator(".edge-label")).toHaveText("1.75 hours");
+  await expect(reverse.locator(".edge-label")).toHaveText("2.50 hours");
+  expect(await page.evaluate(() => window.harness.selections)).toEqual([]);
+
+  await forward.locator(".edge-hit").hover();
+  expect(await page.evaluate(() => window.harness.tooltips.at(-1))).toEqual(expect.objectContaining({
+    dataItems: expect.arrayContaining([
+      { displayName: "Source", value: "Triage" },
+      { displayName: "Target", value: "Waiting" },
+      { displayName: "Prepared duration", value: "1.75 hours (mean)" }
+    ])
+  }));
+  await forward.locator(".edge-hit").click();
+  await expect.poll(() => page.evaluate(() => window.harness.selections.at(-1))).toEqual(["row-6"]);
+  await expect(forward).toHaveClass(/selected/);
+  await expect(reverse).not.toHaveClass(/selected/);
+
+  await reverse.locator(".edge-hit").click({ button: "right" });
+  await expect.poll(() => page.evaluate(() => window.harness.menus.length)).toBe(1);
+  expect(await page.evaluate(() => window.harness.menus.at(-1)?.key)).toBe("row-7");
+
+  await tablePanel(page);
+  const reverseRow = page.locator('tr[data-edge=\'["Waiting","Triage",""]\']');
+  await expect(reverseRow).toContainText("2.50 hours (mean)");
+  const reverseSelect = reverseRow.getByRole("button", { name: /Select represented rows/ });
+  await reverseSelect.focus();
+  expect(await page.evaluate(() => window.harness.tooltips.at(-1))).toEqual(expect.objectContaining({
+    dataItems: expect.arrayContaining([
+      { displayName: "Source", value: "Waiting" },
+      { displayName: "Target", value: "Triage" },
+      { displayName: "Prepared duration", value: "2.50 hours (mean)" }
+    ])
+  }));
+  await page.keyboard.press("Enter");
+  await expect.poll(() => page.evaluate(() => window.harness.selections.at(-1))).toEqual(["row-7"]);
+  await expect(reverse).toHaveClass(/selected/);
+  await expect(forward).not.toHaveClass(/selected/);
+  await page.keyboard.press("Shift+F10");
+  await expect.poll(() => page.evaluate(() => window.harness.menus.length)).toBe(2);
+  expect(await page.evaluate(() => window.harness.menus.at(-1)?.key)).toBe("row-7");
+});
+
+test("packaged harness V03 preserves the 0.25-hour Triage self-loop and its host actions", async ({ page }) => {
+  await openPackage(page, { data: preparedFixture() });
+  await controlsPanel(page);
+  await page.locator('[data-focus="variant"]').selectOption({ label: "V03" });
+  await page.locator('[data-focus="overlay"]').selectOption("duration");
+
+  const loop = page.locator('.edge[data-key=\'["Triage","Triage",""]\']');
+  await expect(loop.locator(".edge-label")).toHaveText("0.25 hours");
+  const hit = loop.locator(".edge-hit");
+  const curvePoint = await hit.evaluate(node => {
+    const path = node as SVGPathElement;
+    const matrix = path.getScreenCTM()!;
+    const probes = Array.from({ length: 19 }, (_, index) => {
+      const point = path.getPointAtLength(path.getTotalLength() * (index + 1) / 20).matrixTransform(matrix);
+      return { x: point.x, y: point.y, target: document.elementFromPoint(point.x, point.y) };
+    });
+    const reachable = probes.find(probe => probe.target === path);
+    if (!reachable) throw new Error(`Self-loop has no pointer-accessible stroke: ${JSON.stringify(probes.map(({ target, ...point }) => ({
+      ...point, hit: target?.tagName, className: target?.getAttribute("class")
+    })))}`);
+    return { x: reachable.x, y: reachable.y };
+  });
+  await page.mouse.move(curvePoint.x, curvePoint.y);
+  expect(await page.evaluate(() => window.harness.tooltips.at(-1))).toEqual(expect.objectContaining({
+    dataItems: expect.arrayContaining([
+      { displayName: "Source", value: "Triage" },
+      { displayName: "Target", value: "Triage" },
+      { displayName: "Prepared duration", value: "0.25 hours (mean)" }
+    ])
+  }));
+  await page.mouse.click(curvePoint.x, curvePoint.y, { button: "right" });
+  await expect.poll(() => page.evaluate(() => window.harness.menus.length)).toBe(1);
+  expect(await page.evaluate(() => window.harness.menus.at(-1)?.key)).toBe("row-11");
+
+  await tablePanel(page);
+  const loopRow = page.locator('tr[data-edge=\'["Triage","Triage",""]\']');
+  await expect(loopRow).toContainText("0.25 hours (mean)");
+  await loopRow.getByRole("button", { name: /Select represented rows/ }).focus();
+  await page.keyboard.press("Space");
+  await expect.poll(() => page.evaluate(() => window.harness.selections.at(-1))).toEqual(["row-11"]);
+  await expect(loop).toHaveClass(/selected/);
+  await page.keyboard.press("Shift+F10");
+  await expect.poll(() => page.evaluate(() => window.harness.menus.length)).toBe(2);
+  expect(await page.evaluate(() => window.harness.menus.at(-1)?.key)).toBe("row-11");
+});
+
 test("persisted formatting, row reorder, context errors, tooltip errors and disposal are explicit", async ({ page }) => {
   const data = fixture();
   await openPackage(page, { data });

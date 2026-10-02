@@ -8,6 +8,7 @@ const outputColumns = ["source", "target", "frequency", "duration", "variant", "
 export const provenance = "Synthetic support tickets; arithmetic mean of adjacent-event elapsed UTC hours within each supplied variant; includes zero-hour ties.";
 
 function identifier(value, context) {
+  // eslint-disable-next-line no-control-regex -- Identifiers must reject C0, DEL, and C1 controls.
   if (typeof value !== "string" || !value.trim() || value.length > 120 || /[\u0000-\u001f\u007f-\u009f]/u.test(value)) {
     throw new Error(`${context}: expected nonblank text, at most 120 characters, without controls.`);
   }
