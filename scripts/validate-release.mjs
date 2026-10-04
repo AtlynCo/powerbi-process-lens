@@ -17,6 +17,7 @@ const commands = [
   ["report-sync-self-test", "node samples\\sync-report-package.mjs --self-test"],
   ["assets", "node scripts\\generate-icons.mjs --check"],
   ["certification-audit-package", "npm run audit:certification"],
+  ["package", "npm run package"],
   ["package-audit", "npm run audit:package"],
   ["bound-report-sync", `node samples\\sync-report-package.mjs --package ${packageArtifact}`],
   ["bound-report-exact-check", `node samples\\sync-report-package.mjs --package ${packageArtifact} --check`],
