@@ -4,6 +4,14 @@
 
 Public Microsoft requirements were reviewed September 9, 2026. Recheck the linked policies and actual offer UI before submission.
 
+## Recorded reviewer feedback and candidate status (October 4, 2026)
+
+The most recent supplied Microsoft review for offer `bda1a03e-a11b-4113-b9af-fdb1ab34382d` (September 23, report `e39ade16-8ad2-4d1f-88f5-746e988b1c37`) reports **100.14.1**: provide the source-repository URL and reviewer access (or access for GitHub user `OSDC1033`). Its **1180.2.3.1** sample hints/tips note is expressly a soft failure; the report supplies no runtime finding. Read-only GitHub permission checks on October 4 returned `read` for both `OSDC1033` and `pbicvsupport` in this private repository; the earlier source-access failure is not an observed current permission failure. These checks do not confirm reviewer login or what the offer's Partner Center notes contain. The owner must verify the reviewer can reach the exact lowercase `certification` branch and include the source URL in the authorized review notes; do not place credentials or recovery codes in the repository.
+
+The protected selected `1.0.3.0` PBIVIZ has SHA-256 `82a67b2a1fbf2a847f0128a9872724cb8a8d5c3d6de254dff6eb3bda4e1087d6`; the existing native PBIX has SHA-256 `170204bd00a0a084f87f7087d3f66b2fc1c5a90ad85426b33099b55fe2d6a81d`. Read-only inspection found a nonempty DataModel and byte-for-byte matching embedded package resources; the PBIX also contains usage-hint textboxes on the overview, V02 and V03 pages and an instruction/quality page. These structural checks do not establish native rendering, first-visit overlays, reviewer visibility of hints or certification. Any rebuilt ZIP with a different hash remains unselected even if its compiled payload matches. The current draft PR branch and unchanged `certification` branch must be reconciled by the coordinator before claiming submitted-source parity.
+
+The October 4 full dependency audit has a separate **unresolved high-severity development-tooling advisory**: `braces@3.0.3` via `powerbi-visuals-tools`/`webpack-dev-server` causes six high transitive findings. GitHub advisory `GHSA-vfj7-8cjw-p6xm` lists no patched version, and the available npm registry still publishes `braces@3.0.3` and tools `7.2.1` as latest. Production-only audit is clear. Do not force-downgrade the SDK, suppress the full audit, or mark its gate passed; rerun after a compatible upstream fix is published.
+
 ## Approved acquisition and runtime
 
 On September 10, 2026 the owner approved **existing Atlyn storefront subscriptions with ungated visuals and free shared viewing**. The renderer is intended as-is; it does not enforce paid-author/subscription entitlements. Do not add license keys, signing infrastructure, AAD/API checks, feature gates, WebAccess or external runtime license calls. Runtime licensing integration is no longer a blocker.
